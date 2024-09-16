@@ -7,13 +7,13 @@ import { useRouter } from "next/navigation";
 import SearchRecipe from "./SearchRecipe";
 
 const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
-  <button type='submit' className={`-ml-3 z-10 ${otherClasses}`}>
+  <button type="submit" className={`-ml-3 z-10 ${otherClasses}`}>
     <Image
       src={"/magnifying-glass.svg"}
       alt={"magnifying glass"}
       width={40}
       height={40}
-      className='object-contain'
+      className="object-contain"
     />
   </button>
 );
@@ -49,43 +49,23 @@ const SearchBar = () => {
     if (recipe) {
       searchParams.set("recipe", recipe);
     } else {
-       searchParams.delete("recipe");
+      searchParams.delete("recipe");
     }
 
     // Generate the new pathname with the updated search parameters
-    const newPathname = `${window.location.pathname}?${searchParams.toString()}`;
+    const newPathname = `${
+      window.location.pathname
+    }?${searchParams.toString()}`;
 
     router.push(newPathname);
   };
 
   return (
-    <form className='searchbar' onSubmit={handleSearch}>
-      <div className='searchbar__item'>
-        <SearchRecipe
-          recipe={recipe}
-          setRecipe={setRecipe}
-        />
-        <SearchButton otherClasses='sm:hidden' />
+    <form className="searchbar" onSubmit={handleSearch}>
+      <div className="searchbar__item">
+        <SearchRecipe recipe={recipe} setRecipe={setRecipe} />
+        <SearchButton otherClasses="sm:hidden" />
       </div>
-      <div className='searchbar__item'>
-        <Image
-          src='/model-icon.png'
-          width={25}
-          height={25}
-          className='absolute w-[20px] h-[20px] ml-4'
-          alt='car model'
-        />
-        <input
-          type='text'
-          name='model'
-          value={model}
-          onChange={(e) => setModel(e.target.value)}
-          placeholder='Tiguan...'
-          className='searchbar__input'
-        />
-        <SearchButton otherClasses='sm:hidden' />
-      </div>
-      <SearchButton otherClasses='max-sm:hidden' />
     </form>
   );
 };

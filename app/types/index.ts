@@ -1,18 +1,23 @@
 import { MouseEventHandler } from "react";
 
 export interface RecipeProps {
-  city_mpg: number;
-  class: string;
-  combination_mpg: number;
-  cylinders: number;
-  displacement: number;
-  drive: string;
-  fuel_type: string;
-  highway_mpg: number;
-  make: string;
-  model: string;
-  transmission: string;
-  year: number;
+  id: number;
+  recipe: string;
+  category: string;
+  prep_time_in_minutes: number;
+  prep_time_note: string | null;
+  cook_time_in_minutes: number;
+  cook_time_note: string | null;
+  difficulty: string;
+  serving: number;
+  image: string;
+  measurements: (number | null)[];
+  ingredients: (string | null)[];
+  directions: (string | null)[];
+  calories: number;
+  fats_in_grams: number;
+  carbohydrates_in_grams: number;
+  proteins_in_grams: number;
 }
 
 export interface FilterProps {

@@ -24,11 +24,11 @@ ul > li > a:hover {
 }
 
 .padding-x {
-  @apply sm:px-16 px-6;
+  @apply ~px-[24px]/[64px];
 }
 
 .padding-y {
-  @apply py-4;
+  @apply ~py-[24px]/[64px];
 }
 
 .flex-center {
@@ -41,6 +41,10 @@ ul > li > a:hover {
 
 .custom-btn {
   @apply flex flex-row relative justify-center items-center py-3 px-6 outline-none;
+}
+
+.big-text {
+  @apply text-4xl font-extrabold text-primary-red;
 }
 /* END: General styles */
 
@@ -73,7 +77,7 @@ ul > li > a:hover {
 /* START: Home styles */
 
 .home__text-container {
-  @apply flex flex-col items-start justify-start gap-y-2.5 text-black-100;
+  @apply flex flex-col items-center justify-center gap-y-2.5 w-full;
 }
 
 .home__filters {
@@ -224,3 +228,52 @@ ul > li > a:hover {
   @apply cursor-default select-none py-2 pl-10 pr-4;
 }
 /* END: search recipe styles */
+
+/* START: Trending recipes section */
+.recipe-container {
+  @apply flex flex-wrap items-center w-full;
+  column-gap: 80px;
+}
+.recipe-item {
+  @apply flex flex-col items-start gap-2 w-[25%];
+}
+.recipe-name {
+  @apply text-[1.1rem] text-black text-left font-semibold w-full;
+}
+.recipe-text {
+  @apply text-[1rem] text-black text-left font-normal;
+}
+/* END: Trending recipes section */
+
+/* START: Newsletter section */
+.newsletter {
+  @apply p-3 placeholder:text-lightGrey placeholder:text-[1rem] text-[1rem] placeholder:font-medium text-black font-medium;
+}
+
+.newsletter-links {
+  @apply text-blue-800 underline decoration-blue-800;
+
+}
+/* END: Newsletter section */
+
+/* START: MISC */
+.icon_box {
+  transition: background 0.3s ease;
+}
+
+/* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+.scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.scrollbar {
+  scrollbar-width: none;
+  user-select: none;
+}
+
+/* Optional: Add smooth scrolling */
+.scrollbar {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: scroll;
+}

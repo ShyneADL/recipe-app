@@ -35,12 +35,12 @@ const NavBar = () => (
         <CustomButton
           title="Log in"
           btnType="button"
-          containerStyles="text-primary-red rounded-lg bg-white min-w-[130px] border-solid border-[1px] border-primary-red"
+          containerStyles="text-primary-red rounded-2xl bg-white min-w-[130px] border-solid border-[1px] border-primary-red"
         />
         <CustomButton
           title="Sign Up"
           btnType="button"
-          containerStyles="text-white rounded-lg bg-primary-red min-w-[130px]"
+          containerStyles="text-white rounded-2xl bg-primary-red min-w-[130px]"
         />
       </div>
     </nav>

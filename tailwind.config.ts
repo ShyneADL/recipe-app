@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import fluid, { extract } from 'fluid-tailwind'
+import fluid, { extract } from "fluid-tailwind";
 module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx,mdx}"],
   extract,
@@ -11,6 +11,7 @@ module.exports = {
       },
       colors: {
         "black-100": "#2B2C35",
+        lightGrey: "#E6E6EA",
         "primary-blue": {
           DEFAULT: "#2B59FF",
           100: "#F5F8FF",

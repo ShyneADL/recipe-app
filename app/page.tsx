@@ -1,6 +1,14 @@
 import { fetchRecipes } from "@/app/utils";
 import { HomeProps } from "@/app/types";
-import { ShowMore, Hero, RecipeCard } from "@/app/components";
+import {
+  ShowMore,
+  Hero,
+  RecipeCard,
+  Categories,
+  TrendingRecipes,
+  Community,
+  Newsletter,
+} from "@/app/components";
 
 export default async function Home({ searchParams }: HomeProps) {
   const allRecipes = await fetchRecipes({
@@ -18,15 +26,12 @@ export default async function Home({ searchParams }: HomeProps) {
   return (
     <main className="overflow-hidden">
       <Hero />
+      <Categories />
+      <TrendingRecipes />
+      <Community />
+      <Newsletter />
 
-      <div className="mt-12 padding-x padding-y max-width" id="discover">
-        <div className="home__text-container">
-          <h1 className="text-4xl font-extrabold">
-            Explore recipes by categories
-          </h1>
-        </div>
-
-        {/* {!isDataEmpty ? (
+      {/* {!isDataEmpty ? (
           <section>
             <div className='home__cars-wrapper'>
               {allRecipes?.map((car) => (
@@ -45,7 +50,6 @@ export default async function Home({ searchParams }: HomeProps) {
             <p>{allRecipes?.message}</p>
           </div>
         )} */}
-      </div>
     </main>
   );
 }

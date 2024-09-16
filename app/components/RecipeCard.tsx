@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import { calculateCarRent, generateCarImageUrl } from "@/app/utils";
 import { RecipeProps } from "@/app/types";
 import CustomButton from "./CustomButton";
 import RecipeDetails from "./RecipeDetails";
@@ -31,7 +30,6 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
         <span className="self-start text-[14px] leading-[17px] font-semibold">
           $
         </span>
-        {carRent}
         <span className="self-end text-[14px] leading-[17px] font-medium">
           /day
         </span>

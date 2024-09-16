@@ -6,9 +6,16 @@ import NavBar from "./Navbar";
 import ShowMore from "./ShowMore";
 import SearchBar from "./Searchbar";
 import Hero from "./Hero";
-
+import Categories from "./Categories";
+import TrendingRecipes from "./TrendingRecipes";
+import Community from "./Community";
+import Newsletter from "./Newsletter";
 export {
   Hero,
+  Newsletter,
+  Community,
+  TrendingRecipes,
+  Categories,
   RecipeCard,
   CustomButton,
   CustomFilter,

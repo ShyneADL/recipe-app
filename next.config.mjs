@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["cdn.imagin.studio"],
+    domains: ["s3.us-west-004.backblazeb2.com"],
   },
 };
 
