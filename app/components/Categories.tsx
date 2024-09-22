@@ -81,7 +81,7 @@ const Categories: React.FC = () => {
 
   return (
     <div className="mt-12 padding-x padding-y max-width" id="discover">
-      <div className="home__text-container">
+      <div className="categories-container">
         <h1 className="big-text">Explore recipes by categories</h1>
         {/* The category section */}
         <div className="flex items-center gap-5 select-none w-full">
@@ -107,7 +107,7 @@ const Categories: React.FC = () => {
               categories.map((category: CategoryProps) => (
                 <div
                   key={category.id}
-                  className="flex flex-col items-center gap-2 w-[200px]"
+                  className="p-3 flex flex-col items-center gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer w-[200px]"
                 >
                   <div className="rounded-full w-[200px]">
                     <Image

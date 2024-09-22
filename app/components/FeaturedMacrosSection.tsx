@@ -1,20 +1,21 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import { RecipeProps } from "../types";
 
-interface TrendingRecipesProps {
-  recipes: RecipeProps[];
+interface FeaturedMacrosSectionProps {
+  highProteinRecipes: RecipeProps[];
 }
 
-const TrendingRecipes: React.FC<TrendingRecipesProps> = ({ recipes }) => {
+const FeaturedMacrosSection: React.FC<FeaturedMacrosSectionProps> = ({
+  highProteinRecipes,
+}) => {
   return (
-    <div className="flex flex-col items-center justify-center padding-y padding-x max-width">
-      <div className="flex gap-1">
-        <h2 className="big-text">Trending Recipes</h2>
-        <Image src="/trending.svg" alt="Trending icon" width={50} height={50} />
-      </div>
+    <div className="flex flex-col items-center justify-center gap-6 padding-x padding-y max-width">
+      <h2 className="big-text">Power Up: High-Protein Keto Recipes</h2>
+
       <div className="recipe-container">
-        {recipes.map((recipe) => (
+        {highProteinRecipes.map((recipe) => (
           <div key={recipe.id} className="recipe-item">
             <Image
               src={recipe.image}
@@ -24,6 +25,10 @@ const TrendingRecipes: React.FC<TrendingRecipesProps> = ({ recipes }) => {
               className="object-contain aspect-video rounded-xl"
             />
             <h3 className="recipe-name">{recipe.recipe}</h3>
+            <p className="recipe-text">
+              Protein:{" "}
+              <span className="text-grey">{recipe.protein_in_grams} g</span>
+            </p>
             <p className="recipe-text">
               Cooking Time:{" "}
               <span className="text-grey">
@@ -37,4 +42,4 @@ const TrendingRecipes: React.FC<TrendingRecipesProps> = ({ recipes }) => {
   );
 };
 
-export default TrendingRecipes;
+export default FeaturedMacrosSection;

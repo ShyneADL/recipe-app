@@ -9,6 +9,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Manrope", sans-serif;
+  transition: background-color 0.3s ease-in;
 }
 
 ul > li > a {
@@ -75,10 +76,6 @@ ul > li > a:hover {
 /* END: Hero styles */
 
 /* START: Home styles */
-
-.home__text-container {
-  @apply flex flex-col items-center justify-center gap-y-2.5 w-full;
-}
 
 .home__filters {
   @apply mt-12 w-full flex-between items-center flex-wrap gap-5;
@@ -229,13 +226,20 @@ ul > li > a:hover {
 }
 /* END: search recipe styles */
 
+/* START: Categories section */
+.categories-container {
+  @apply flex flex-col items-center justify-center gap-6 w-full;
+}
+/* END: Categories section */
+
 /* START: Trending recipes section */
 .recipe-container {
-  @apply flex flex-wrap items-center w-full;
+  @apply flex flex-wrap items-center justify-between w-full;
+  row-gap: 80px;
   column-gap: 80px;
 }
 .recipe-item {
-  @apply flex flex-col items-start gap-2 w-[25%];
+  @apply flex flex-col items-start gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer p-3 w-[25%];
 }
 .recipe-name {
   @apply text-[1.1rem] text-black text-left font-semibold w-full;
@@ -247,12 +251,11 @@ ul > li > a:hover {
 
 /* START: Newsletter section */
 .newsletter {
-  @apply p-3 placeholder:text-lightGrey placeholder:text-[1rem] text-[1rem] placeholder:font-medium text-black font-medium;
+  @apply p-3 placeholder:text-lightGrey border-[1px] border-lightGrey border-solid placeholder:text-[1rem] text-[1rem] placeholder:font-medium text-black font-medium;
 }
 
 .newsletter-links {
   @apply text-blue-800 underline decoration-blue-800;
-
 }
 /* END: Newsletter section */
 

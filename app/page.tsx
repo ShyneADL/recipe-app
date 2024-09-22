@@ -1,55 +1,45 @@
-import { fetchRecipes } from "@/app/utils";
-import { HomeProps } from "@/app/types";
+import { RecipeProps } from "./types";
 import {
-  ShowMore,
   Hero,
-  RecipeCard,
   Categories,
   TrendingRecipes,
   Community,
   Newsletter,
+  FeaturedMacrosSection,
 } from "@/app/components";
 
-export default async function Home({ searchParams }: HomeProps) {
-  const allRecipes = await fetchRecipes({
-    protein: searchParams.protein || "",
-    carbohydrates: searchParams.carbohydrates || "",
-    fats: searchParams.fats || "",
-    calories: searchParams.calories || 200,
-    cooktimeinminutes: searchParams.cooktimeinminutes || 10,
-    preptimeinminutes: searchParams.preptimeinminutes || 10,
-  });
+export default async function Home() {
+  const recipesUrl = "https://keto-diet.p.rapidapi.com/";
+  const highProteinUrl =
+    "https://keto-diet.p.rapidapi.com/?protein_in_grams__lt=50&protein_in_grams__gt=20";
 
-  const isDataEmpty =
-    !Array.isArray(allRecipes) || allRecipes.length < 1 || !allRecipes;
+  const options = {
+    method: "GET",
+    headers: {
+      "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
+      "x-rapidapi-host": "keto-diet.p.rapidapi.com",
+    },
+  };
 
+  // Fetch both recipes and high protein recipes simultaneously
+  const [recipesResponse, highProteinResponse] = await Promise.all([
+    fetch(recipesUrl, options),
+    fetch(highProteinUrl, options),
+  ]);
+
+  const recipes: RecipeProps[] = await recipesResponse.json();
+  const highProteinRecipes: RecipeProps[] = await highProteinResponse.json();
+
+  console.log("Recipes Response:", recipes); // Debugging
+  console.log("High Protein Recipes Response:", highProteinRecipes); // Debugging
   return (
     <main className="overflow-hidden">
       <Hero />
       <Categories />
-      <TrendingRecipes />
+      <TrendingRecipes recipes={recipes} />
       <Community />
       <Newsletter />
-
-      {/* {!isDataEmpty ? (
-          <section>
-            <div className='home__cars-wrapper'>
-              {allRecipes?.map((car) => (
-                <CarCard car={car} />
-              ))}
-            </div>
-
-            <ShowMore
-              pageNumber={(searchParams.calories || 10) / 10}
-              isNext={(searchParams.calories || 10) > allRecipes.length}
-            />
-          </section>
-        ) : (
-          <div className='home__error-container'>
-            <h2 className='text-black text-xl font-bold'>Oops, no results</h2>
-            <p>{allRecipes?.message}</p>
-          </div>
-        )} */}
+      <FeaturedMacrosSection highProteinRecipes={highProteinRecipes} />
     </main>
   );
 }

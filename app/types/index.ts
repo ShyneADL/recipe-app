@@ -15,9 +15,9 @@ export interface RecipeProps {
   ingredients: (string | null)[];
   directions: (string | null)[];
   calories: number;
-  fats_in_grams: number;
+  fat_in_grams: number;
   carbohydrates_in_grams: number;
-  proteins_in_grams: number;
+  protein_in_grams: number;
 }
 
 export interface FilterProps {
