@@ -3,7 +3,7 @@ import { MouseEventHandler } from "react";
 export interface RecipeProps {
   id: number;
   recipe: string;
-  category: string;
+  category: CategoryProps;
   prep_time_in_minutes: number;
   prep_time_note: string | null;
   cook_time_in_minutes: number;
@@ -11,13 +11,52 @@ export interface RecipeProps {
   difficulty: string;
   serving: number;
   image: string;
-  measurements: (number | null)[];
-  ingredients: (string | null)[];
-  directions: (string | null)[];
+  measurement_1?: number | null;
+  measurement_2?: number | null;
+  measurement_3?: number | null;
+  measurement_4?: number | null;
+  measurement_5?: number | null;
+  measurement_6?: number | null;
+  measurement_7?: number | null;
+  measurement_8?: number | null;
+  measurement_9?: number | null;
+  measurement_10?: number | null;
+  ingredient_1?: string | null;
+  ingredient_2?: string | null;
+  ingredient_3?: string | null;
+  ingredient_4?: string | null;
+  ingredient_5?: string | null;
+  ingredient_6?: string | null;
+  ingredient_7?: string | null;
+  ingredient_8?: string | null;
+  ingredient_9?: string | null;
+  ingredient_10?: string | null;
+  direction_1?: string | null;
+  direction_2?: string | null;
+  direction_3?: string | null;
+  direction_4?: string | null;
+  direction_5?: string | null;
+  direction_6?: string | null;
+  direction_7?: string | null;
+  direction_8?: string | null;
+  direction_9?: string | null;
+  direction_10?: string | null;
   calories: number;
   fat_in_grams: number;
   carbohydrates_in_grams: number;
   protein_in_grams: number;
+}
+
+export interface RecipeDetailsProps {
+  recipe: RecipeProps;
+  isOpen: boolean;
+  closeModal: () => void;
+}
+
+export interface CategoryProps {
+  id: number;
+  category: string;
+  thumbnail: string;
 }
 
 export interface FilterProps {
@@ -31,15 +70,6 @@ export interface FilterProps {
 
 export interface HomeProps {
   searchParams: FilterProps;
-}
-
-export interface RecipeCardProps {
-  protein?: string;
-  carbohydrates?: string;
-  fats?: string;
-  calories?: number;
-  cooktimeinminutes?: number;
-  preptimeinminutes?: number;
 }
 
 export interface CustomButtonProps {

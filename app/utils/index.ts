@@ -57,3 +57,50 @@ export async function fetchRecipes(filters: FilterProps) {
 
   return result;
 }
+
+export const gatherIngredients = (recipe: RecipeProps): (string | null)[] => {
+  const ingredients: (string | null)[] = [];
+
+  // Loop through the ingredient fields and collect only the string or null values
+  for (let i = 1; i <= 10; i++) {
+    const ingredient = recipe[`ingredient_${i}` as keyof RecipeProps];
+
+    // Only push if the ingredient is a string or null
+    if (typeof ingredient === "string" || ingredient === null) {
+      ingredients.push(ingredient);
+    }
+  }
+
+  return ingredients;
+};
+export const gatherMeasurements = (recipe: RecipeProps): (string | null)[] => {
+  const measurements: (string | null)[] = [];
+
+  // Loop through the measurement fields and collect only the string or null values
+  for (let i = 1; i <= 10; i++) {
+    const measurement = recipe[`measurement_${i}` as keyof RecipeProps];
+
+    // Only push if the measurement is a string or null
+    if (typeof measurement === "string" || measurement === null) {
+      measurements.push(measurement);
+    }
+  }
+
+  return measurements;
+};
+
+export const gatherDirections = (recipe: RecipeProps): (string | null)[] => {
+  const directions: (string | null)[] = [];
+
+  // Loop through the direction fields and collect only the string or null values
+  for (let i = 1; i <= 10; i++) {
+    const direction = recipe[`direction_${i}` as keyof RecipeProps];
+
+    // Only push if the direction is a string or null
+    if (typeof direction === "string" || direction === null) {
+      directions.push(direction);
+    }
+  }
+
+  return directions;
+};

@@ -1,5 +1,5 @@
 import React from "react";
-import CustomButton from "./CustomButton";
+import CustomButton from "../components/CustomButton";
 import Image from "next/image";
 
 const Community = () => {

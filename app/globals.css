@@ -235,17 +235,28 @@ ul > li > a:hover {
 /* START: Trending recipes section */
 .recipe-container {
   @apply flex flex-wrap items-center justify-between w-full;
-  row-gap: 80px;
-  column-gap: 80px;
+  row-gap: 60px;
 }
 .recipe-item {
-  @apply flex flex-col items-start gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer p-3 w-[25%];
+  @apply flex flex-col items-start gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer p-3 w-[33%];
 }
 .recipe-name {
   @apply text-[1.1rem] text-black text-left font-semibold w-full;
 }
 .recipe-text {
   @apply text-[1rem] text-black text-left font-normal;
+}
+
+.recipe-image {
+  @apply object-cover aspect-video rounded-xl w-full;
+}
+
+.recipe-infobox {
+  @apply flex items-center gap-1 rounded-xl bg-primary-red-100 p-2;
+}
+
+.recipe-infobox > p {
+  @apply text-[16px] text-center font-medium tracking-normal leading-normal;
 }
 /* END: Trending recipes section */
 

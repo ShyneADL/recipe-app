@@ -1,43 +1,16 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
+import { CategoryProps } from "../types";
 
-interface CategoryProps {
-  id: number;
-  category: string;
-  thumbnail: string;
+interface CategorySectionProps {
+  categories: CategoryProps[];
 }
-const Categories: React.FC = () => {
-  // State to hold the categories data
-  const [categories, setCategories] = useState<CategoryProps[]>([]);
+const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
   const [showLeftIcon, setShowLeftIcon] = useState(false);
   const [showRightIcon, setShowRightIcon] = useState(true);
 
-  // Ref to reference the scrollable category div
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const url = "https://keto-diet.p.rapidapi.com/categories/";
-      const options = {
-        method: "GET",
-        headers: {
-          "X-RapidAPI-Key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
-          "X-RapidAPI-Host": "keto-diet.p.rapidapi.com",
-        },
-      };
-
-      try {
-        const response = await fetch(url, options);
-        const result = await response.json(); // Parse response as JSON
-        setCategories(result); // Set the API result into categories state
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
 
   const scrollLeft = () => {
     if (scrollRef.current) {
