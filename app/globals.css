@@ -12,13 +12,6 @@
   transition: background-color 0.3s ease-in;
 }
 
-ul > li > a {
-  transition: color 0.4s ease;
-}
-ul > li > a:hover {
-  color: #fc0000;
-}
-
 /* START: General styles */
 .max-width {
   @apply max-w-[1440px] mx-auto;
@@ -47,6 +40,14 @@ ul > li > a:hover {
 .big-text {
   @apply text-4xl font-extrabold text-primary-red;
 }
+
+ul > li > a {
+  transition: color 0.4s ease;
+}
+ul > li > a:hover {
+  color: #fc0000;
+}
+
 /* END: General styles */
 
 /* START: Hero styles */
@@ -247,18 +248,33 @@ ul > li > a:hover {
   @apply text-[1rem] text-black text-left font-normal;
 }
 
+/* END: Trending recipes section */
+
+/* START: Recipe details section */
 .recipe-image {
   @apply object-cover aspect-video rounded-xl w-full;
 }
 
 .recipe-infobox {
-  @apply flex items-center gap-1 rounded-xl bg-primary-red-100 p-2;
+  @apply flex items-center gap-1 rounded-3xl bg-black p-3;
 }
 
-.recipe-infobox > p {
-  @apply text-[16px] text-center font-medium tracking-normal leading-normal;
+.recipe-infotext {
+  @apply text-[16px] text-center text-white font-semibold tracking-normal leading-normal;
 }
-/* END: Trending recipes section */
+
+.recipe-info-title {
+  @apply ~text-[20px]/[32px] text-black font-bold text-left tracking-normal leading-normal;
+}
+
+.recipe-small-text {
+  @apply text-[16px] text-black font-medium text-left tracking-normal leading-normal;
+}
+
+.recipe-list {
+  @apply flex flex-col items-start gap-1 w-full;
+}
+/* END: Recipe details section */
 
 /* START: Newsletter section */
 .newsletter {

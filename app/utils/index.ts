@@ -94,7 +94,7 @@ export const gatherDirections = (recipe: RecipeProps): (string | null)[] => {
 
   // Loop through the direction fields and collect only the string or null values
   for (let i = 1; i <= 10; i++) {
-    const direction = recipe[`direction_${i}` as keyof RecipeProps];
+    const direction = recipe[`directions_step_${i}` as keyof RecipeProps];
 
     // Only push if the direction is a string or null
     if (typeof direction === "string" || direction === null) {
@@ -103,4 +103,27 @@ export const gatherDirections = (recipe: RecipeProps): (string | null)[] => {
   }
 
   return directions;
+};
+
+export const gatherIngredientsAndMeasurements = (
+  recipe: RecipeProps
+): { ingredient: string | null; measurement: number | null }[] => {
+  const combined: { ingredient: string | null; measurement: number | null }[] =
+    [];
+
+  for (let i = 1; i <= 10; i++) {
+    const ingredient = recipe[`ingredient_${i}` as keyof RecipeProps] as
+      | string
+      | null;
+    const measurement = recipe[`measurement_${i}` as keyof RecipeProps] as
+      | number
+      | null;
+
+    // Only push the ingredient and measurement if they exist
+    if (ingredient || measurement) {
+      combined.push({ ingredient, measurement });
+    }
+  }
+
+  return combined;
 };
