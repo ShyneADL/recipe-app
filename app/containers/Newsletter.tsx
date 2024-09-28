@@ -9,7 +9,7 @@ const Newsletter = () => {
           <h3 className="text-primary-red text-[1.6rem] font-bold w-fit">
             Get inspired by KetoHub's superstar recipes.
           </h3>
-          <p className="text-black font-bold text-[1rem] leading-[22px] w-[600px]">
+          <p className="text-black font-bold text-[1rem] leading-[22px] ~w-{250px]/[600px]">
             Join the KetoHub community and get exclusive keto recipes from
             around the globe delivered straight to your inbox! Stay inspired
             with low-carb meal ideas, cooking tips, and more. Subscribe now to

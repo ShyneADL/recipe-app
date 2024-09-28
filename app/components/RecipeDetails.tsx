@@ -1,6 +1,10 @@
 import { Fragment } from "react";
 import Image from "next/image";
-import { gatherDirections, gatherIngredientsAndMeasurements } from "../utils";
+import {
+  gatherDirections,
+  gatherIngredientsAndMeasurements,
+  getChefHatCount,
+} from "../utils";
 
 import {
   Dialog,
@@ -18,6 +22,7 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({
 }) => {
   const directions = gatherDirections(recipe);
   const ingredients = gatherIngredientsAndMeasurements(recipe);
+  const chefHatCount = getChefHatCount(recipe.difficulty);
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -66,7 +71,7 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({
                     width={200}
                     height={200}
                   />
-
+                  {/* Recipe info */}
                   <div className="flex items-center flex-wrap gap-2 justify-between w-full">
                     {/* Servings */}
                     <div className="recipe-infobox">
@@ -98,6 +103,7 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({
                       </p>
                     </div>
                   </div>
+
                   {/* Ingredients */}
                   <div className="flex flex-col items-start gap-2">
                     <h2 className="recipe-info-title">Ingredients:</h2>
@@ -173,6 +179,23 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({
                         ) : null
                       )}
                     </ul>
+                  </div>
+                  {/* Difficulty */}
+                  <div className="flex items-center gap-1">
+                    <p className="recipe-info-title">Difficulty:</p>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: chefHatCount }).map((_, index) => (
+                        <Image
+                          key={index}
+                          src="/chef.png"
+                          alt="chef hat icon"
+                          width={40}
+                          height={40}
+                          className="chef-hat"
+                          style={{ width: "40px", height: "40px" }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </DialogPanel>
               </TransitionChild>

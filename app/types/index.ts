@@ -98,6 +98,6 @@ export interface ShowMoreProps {
 }
 
 export interface SearchRecipeProps {
-  recipe: string;
+  recipe: RecipeProps;
   setRecipe: (recipe: string) => void;
 }

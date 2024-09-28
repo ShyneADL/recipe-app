@@ -33,20 +33,22 @@ const Hero = () => {
           </div>
 
           {/* Images */}
-          <div className="absolute bottom-20 left-[-75px] z-[-1]">
+          <div className="absolute ~bottom-[40px]/[80px] xl:left-[-75px] md:left-[-40px] z-[-1]">
             <Image
               src="/ingredients.jpg"
               alt="ingredients illustration"
               width={200}
               height={200}
+              className="hero-images"
             />
           </div>
-          <div className="absolute bottom-20 right-[-75px] z-[-1]">
+          <div className="absolute ~bottom-[40px]/[80px] xl:right-[-75px] md:right-[-40px] z-[-1]">
             <Image
               src="/girl.svg"
               alt="Girl illustration"
               width={200}
               height={200}
+              className="hero-images"
               priority
             />
           </div>
