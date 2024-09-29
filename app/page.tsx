@@ -17,10 +17,10 @@ function shuffleArray(array: RecipeProps[]): RecipeProps[] {
   return array;
 }
 export default async function Home() {
-  const recipesUrl = "https://keto-diet.p.rapidapi.com/";
   const highProteinUrl =
     "https://keto-diet.p.rapidapi.com/?protein_in_grams__lt=50&protein_in_grams__gt=20";
   const categoriesUrl = "https://keto-diet.p.rapidapi.com/categories/";
+  const recipesUrl = "https://keto-diet.p.rapidapi.com/";
 
   const options = {
     method: "GET",
@@ -44,6 +44,7 @@ export default async function Home() {
   const highProteinRecipes: RecipeProps[] = await highProteinResponse.json();
   const threeProteinRecipes = shuffleArray([...highProteinRecipes]).slice(0, 3);
   const categories: CategoryProps[] = await categoriesResponse.json();
+
   return (
     <main className="overflow-hidden">
       <Hero />

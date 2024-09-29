@@ -25,7 +25,7 @@ const SearchRecipe = ({ recipes, setRecipe }: SearchRecipeProps) => {
   // Filter recipes based on the query
   const filteredRecipes =
     query === ""
-      ? recipes || [] // If no query, return all recipes
+      ? recipes || []
       : (recipes || []).filter((item) => {
           const recipeName = item.recipe.toLowerCase(); // Access the recipe name and convert to lowercase
           const cleanedQuery = query.toLowerCase().replace(/\s+/g, ""); // Clean the query
