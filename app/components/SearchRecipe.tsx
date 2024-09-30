@@ -2,7 +2,6 @@ import Image from "next/image";
 import { Fragment, useState, useEffect } from "react";
 import {
   Combobox,
-  ComboboxButton,
   ComboboxOptions,
   ComboboxInput,
   Transition,
@@ -25,23 +24,23 @@ const SearchRecipe = ({ recipes, setRecipe }: SearchRecipeProps) => {
         );
 
   return (
-    <div className="search-manufacturer">
+    <div className="search-recipe">
       <Combobox value={null} onChange={setRecipe}>
         {" "}
         {/* Handles single recipe */}
-        <div className="relative flex gap-3 items-center w-full">
-          <ComboboxButton className="">
+        <div className="relative flex flex-row-reverse items-center justify-center w-full">
+          <button type="submit" className="z-10">
             <Image
-              src="/food-logo.svg"
-              width={20}
-              height={20}
-              className="ml-4"
-              alt="recipe logo"
+              src="/magnifying-glass.svg"
+              alt="magnifying glass"
+              width={40}
+              height={40}
+              className="object-contain"
             />
-          </ComboboxButton>
+          </button>
 
           <ComboboxInput
-            className="search-recipe__input"
+            className="search-recipe__input relative"
             displayValue={(recipe: RecipeProps) => recipe?.recipe || ""}
             onChange={(event) => setQuery(event.target.value)} // Update the search query when the input changes
             placeholder="Search Recipes"
@@ -54,14 +53,14 @@ const SearchRecipe = ({ recipes, setRecipe }: SearchRecipeProps) => {
             leaveTo="opacity-0"
             afterLeave={() => setQuery("")} // Reset the search query after the transition completes
           >
-            <ComboboxOptions className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <ComboboxOptions className="absolute top-10 left-[45%] translate-x-[-45%] mt-5 max-h-60 w-[400px] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {filteredRecipes.length > 0 ? (
                 filteredRecipes.map((recipe) => (
                   <Combobox.Option key={recipe.id} value={recipe}>
                     {({ active }) => (
                       <div
                         className={`${
-                          active ? "bg-blue-500 text-white" : "text-gray-900"
+                          active ? "bg-primary-red text-white" : "text-gray-900"
                         } cursor-pointer select-none relative py-2 pl-10 pr-4`}
                       >
                         {recipe.recipe}

@@ -7,18 +7,6 @@ import { useRouter } from "next/navigation";
 import SearchRecipe from "./SearchRecipe";
 import { RecipeProps } from "../types";
 
-const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
-  <button type="submit" className={`-ml-3 z-10 ${otherClasses}`}>
-    <Image
-      src={"/magnifying-glass.svg"}
-      alt={"magnifying glass"}
-      width={40}
-      height={40}
-      className="object-contain"
-    />
-  </button>
-);
-
 const SearchBar = () => {
   const [recipes, setRecipes] = useState<RecipeProps[]>([]); // Store fetched recipes
   const [recipe, setRecipe] = useState<RecipeProps | null>(null); // Store selected recipe
@@ -52,7 +40,7 @@ const SearchBar = () => {
     };
 
     fetchRecipes();
-  }, []); // Empty dependency array means this runs on component mount
+  }, []);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -82,11 +70,7 @@ const SearchBar = () => {
 
   return (
     <form className="searchbar" onSubmit={handleSearch}>
-      <div className="searchbar__item">
-        <SearchRecipe recipes={recipes} setRecipe={setRecipe} />{" "}
-        {/* Pass the fetched recipes */}
-        <SearchButton otherClasses="sm:hidden" />
-      </div>
+      <SearchRecipe recipes={recipes} setRecipe={setRecipe} />{" "}
     </form>
   );
 };

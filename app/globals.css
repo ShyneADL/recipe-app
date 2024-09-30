@@ -71,7 +71,7 @@ ul > li > a:hover {
 /* START: Home styles */
 
 .home__filters {
-  @apply mt-12 w-full flex-center flex-wrap gap-5;
+  @apply mt-6 w-full flex-center gap-5;
 }
 
 .home__filter-container {
@@ -129,25 +129,25 @@ ul > li > a:hover {
 
 /* START: searchbar styles */
 .searchbar {
-  @apply flex items-center justify-start max-sm:flex-col w-full relative max-sm:gap-4 max-w-3xl;
+  @apply flex items-center justify-center max-sm:flex-col w-full relative max-sm:gap-4 max-w-3xl;
 }
 
 .searchbar__item {
-  @apply flex-1 max-sm:w-full flex justify-center items-center relative;
+  @apply flex-1 w-full flex justify-center items-center relative;
 }
 
 .searchbar__input {
-  @apply w-full h-[48px] pl-12 p-4 bg-[#e6e6e6] rounded-full max-sm:rounded-full outline-none cursor-pointer text-sm;
+  @apply w-full p-4 bg-lightGrey rounded-full max-sm:rounded-full outline-none cursor-pointer text-[22px];
 }
 /* END: searchbar styles */
 
 /* START: search recipe styles */
 .search-recipe {
-  @apply flex-1 max-sm:w-full flex justify-start items-center;
+  @apply flex-1 w-full flex justify-center items-center;
 }
 
 .search-recipe__input {
-  @apply w-full h-[48px] pl-12 p-4 rounded-l-full max-sm:rounded-full bg-light-white outline-none cursor-pointer text-sm;
+  @apply w-[400px] p-4 rounded-full max-sm:rounded-full bg-lightGrey outline-none cursor-pointer text-sm;
 }
 
 .search-recipe__options {
@@ -215,7 +215,7 @@ ul > li > a:hover {
 
 /* START: Newsletter section */
 .newsletter {
-  @apply p-3 placeholder:text-lightGrey border-[1px] border-lightGrey border-solid placeholder:text-[1rem] text-[1rem] placeholder:font-medium text-black font-medium;
+  @apply p-3 placeholder:text-grey border-[1px] border-lightGrey border-solid placeholder:text-[1rem] text-[1rem] placeholder:font-medium text-black font-medium;
 }
 
 .newsletter-links {
