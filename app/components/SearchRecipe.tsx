@@ -7,48 +7,30 @@ import {
   ComboboxInput,
   Transition,
 } from "@headlessui/react";
-import { RecipeProps } from "../types"; // Make sure to import RecipeProps
+import { RecipeProps } from "../types";
 
 interface SearchRecipeProps {
-  recipes: RecipeProps[]; // Should be an array of recipes
-  setRecipe: (recipe: RecipeProps | null) => void; // Set recipe based on user selection
+  recipes: RecipeProps[];
+  setRecipe: (recipe: RecipeProps | null) => void;
 }
 
 const SearchRecipe = ({ recipes, setRecipe }: SearchRecipeProps) => {
   const [query, setQuery] = useState("");
 
-  // Log the entire recipes array
-  useEffect(() => {
-    console.log("All Recipes: ", recipes);
-  }, [recipes]);
-
-  // Filter recipes based on the query
   const filteredRecipes =
     query === ""
-      ? recipes || []
-      : (recipes || []).filter((item) => {
-          const recipeName = item.recipe.toLowerCase(); // Access the recipe name and convert to lowercase
-          const cleanedQuery = query.toLowerCase().replace(/\s+/g, ""); // Clean the query
-          const cleanedRecipeName = recipeName.replace(/\s+/g, ""); // Clean the recipe name
-          const match = cleanedRecipeName.includes(cleanedQuery); // Check for a match
-
-          // Log each comparison for debugging
-          console.log(
-            `Searching for: "${cleanedQuery}", Recipe: "${cleanedRecipeName}", Match: ${match}`
-          );
-          return match; // Return true if there's a match
-        });
-
-  // Log filtered recipes whenever the query or filteredRecipes changes
-  useEffect(() => {
-    console.log("Filtered Recipes: ", filteredRecipes);
-  }, [filteredRecipes]);
+      ? recipes
+      : recipes.filter((item) =>
+          item.recipe.toLowerCase().includes(query.toLowerCase())
+        );
 
   return (
     <div className="search-manufacturer">
       <Combobox value={null} onChange={setRecipe}>
-        <div className="relative w-full">
-          <ComboboxButton className="absolute top-[14px]">
+        {" "}
+        {/* Handles single recipe */}
+        <div className="relative flex gap-3 items-center w-full">
+          <ComboboxButton className="">
             <Image
               src="/food-logo.svg"
               width={20}
@@ -60,9 +42,7 @@ const SearchRecipe = ({ recipes, setRecipe }: SearchRecipeProps) => {
 
           <ComboboxInput
             className="search-recipe__input"
-            displayValue={(item: RecipeProps | null) =>
-              item ? item.recipe : ""
-            } // Display the recipe name
+            displayValue={(recipe: RecipeProps) => recipe?.recipe || ""}
             onChange={(event) => setQuery(event.target.value)} // Update the search query when the input changes
             placeholder="Search Recipes"
           />

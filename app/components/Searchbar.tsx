@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import SearchRecipe from "./SearchRecipe";
+import { RecipeProps } from "../types";
 
 const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
   <button type="submit" className={`-ml-3 z-10 ${otherClasses}`}>
@@ -19,51 +20,71 @@ const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
 );
 
 const SearchBar = () => {
-  const [recipe, setRecipe] = useState("");
-  const [model, setModel] = useState("");
+  const [recipes, setRecipes] = useState<RecipeProps[]>([]); // Store fetched recipes
+  const [recipe, setRecipe] = useState<RecipeProps | null>(null); // Store selected recipe
 
   const router = useRouter();
+
+  // Fetch recipes from the API on mount
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      const url = "https://keto-diet.p.rapidapi.com/";
+      const options = {
+        method: "GET",
+        headers: {
+          "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
+          "x-rapidapi-host": "keto-diet.p.rapidapi.com",
+        },
+      };
+
+      try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+          throw new Error("Failed to fetch recipes");
+        }
+        const result = await response.json(); // Assuming the API returns JSON
+
+        // Assuming result contains an array of recipes, transform it if needed
+        setRecipes(result); // Update with fetched recipes
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchRecipes();
+  }, []); // Empty dependency array means this runs on component mount
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (recipe.trim() === "" && model.trim() === "") {
+    // Ensure a recipe is selected and has a name
+    if (!recipe || !recipe.recipe.trim()) {
       return alert("Please provide some input");
     }
 
-    updateSearchParams(model.toLowerCase(), recipe.toLowerCase());
+    updateSearchParams(recipe.recipe.toLowerCase());
   };
 
-  const updateSearchParams = (model: string, recipe: string) => {
-    // Create a new URLSearchParams object using the current URL search parameters
+  const updateSearchParams = (recipeString: string) => {
     const searchParams = new URLSearchParams(window.location.search);
 
-    // Update or delete the 'model' search parameter based on the 'model' value
-    if (model) {
-      searchParams.set("model", model);
-    } else {
-      searchParams.delete("model");
-    }
-
-    // Update or delete the 'recipe' search parameter based on the 'recipe' value
-    if (recipe) {
-      searchParams.set("recipe", recipe);
+    if (recipeString) {
+      searchParams.set("recipe", recipeString);
     } else {
       searchParams.delete("recipe");
     }
 
-    // Generate the new pathname with the updated search parameters
     const newPathname = `${
       window.location.pathname
     }?${searchParams.toString()}`;
-
     router.push(newPathname);
   };
 
   return (
     <form className="searchbar" onSubmit={handleSearch}>
       <div className="searchbar__item">
-        <SearchRecipe recipe={recipe} setRecipe={setRecipe} />
+        <SearchRecipe recipes={recipes} setRecipe={setRecipe} />{" "}
+        {/* Pass the fetched recipes */}
         <SearchButton otherClasses="sm:hidden" />
       </div>
     </form>
