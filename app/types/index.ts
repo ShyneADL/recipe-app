@@ -60,12 +60,8 @@ export interface CategoryProps {
 }
 
 export interface FilterProps {
-  protein?: string;
-  carbohydrates?: string;
-  fats?: string;
-  calories?: number;
-  cooktimeinminutes?: number;
-  preptimeinminutes?: number;
+  recipes: RecipeProps[];
+  setFilteredRecipes: (filteredRecipes: RecipeProps[]) => void;
 }
 
 export interface HomeProps {
