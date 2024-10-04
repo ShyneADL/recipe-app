@@ -4,7 +4,7 @@ import {
   gatherDirections,
   gatherIngredientsAndMeasurements,
   getChefHatCount,
-} from "../utils";
+} from "@/app/utils";
 
 import {
   Dialog,

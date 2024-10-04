@@ -28,36 +28,6 @@ export const deleteSearchParams = (type: string) => {
   return newPathname;
 };
 
-export async function fetchRecipes(filters: FilterProps) {
-  const {
-    protein,
-    carbohydrates,
-    fats,
-    calories,
-    cooktimeinminutes,
-    preptimeinminutes,
-  } = filters;
-
-  // Set the required headers for the API request
-  const headers: HeadersInit = {
-    "X-RapidAPI-Key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
-    "X-RapidAPI-Host": "keto-diet.p.rapidapi.com",
-  };
-
-  // Set the required headers for the API request
-  const response = await fetch(
-    `https://keto-diet.p.rapidapi.com/recipes?protein=${protein}&carbohydrates=${carbohydrates}&fats=${fats}&calories=${calories}&cooktimeinminutes=${cooktimeinminutes}&preptimeinminutes=${preptimeinminutes}`,
-    {
-      headers: headers,
-    }
-  );
-
-  // Parse the response as JSON
-  const result = await response.json();
-
-  return result;
-}
-
 export const gatherDirections = (recipe: RecipeProps): (string | null)[] => {
   const directions: (string | null)[] = [];
 
@@ -98,12 +68,12 @@ export const gatherIngredientsAndMeasurements = (
 };
 
 export const getChefHatCount = (difficulty: string): number => {
-  switch (difficulty.toLowerCase()) {
-    case "easy":
+  switch (difficulty) {
+    case "Easy":
       return 1;
-    case "medium":
+    case "Medium":
       return 2;
-    case "difficult":
+    case "Difficult":
       return 3;
     default:
       return 0;

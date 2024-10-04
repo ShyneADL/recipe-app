@@ -6,7 +6,7 @@ import {
   ComboboxInput,
   Transition,
 } from "@headlessui/react";
-import { RecipeProps } from "../types";
+import { RecipeProps } from "@/app/types";
 
 interface SearchRecipeProps {
   recipes: RecipeProps[];

@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
-import { CategoryProps } from "../types";
+import { CategoryProps } from "@/app/types";
 
 interface CategorySectionProps {
   categories: CategoryProps[];

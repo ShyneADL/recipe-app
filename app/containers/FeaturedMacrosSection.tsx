@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { RecipeProps } from "../types";
-import { RecipeDetails } from "../components";
-import { getChefHatCount } from "../utils";
+import { RecipeProps } from "@/app/types";
+import { RecipeDetails } from "@/app/components";
+import { getChefHatCount } from "@/app/utils";
 
 interface FeaturedMacrosSectionProps {
   highProteinRecipes: RecipeProps[];

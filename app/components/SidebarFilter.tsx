@@ -10,8 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { FilterProps, CategoryProps } from "../types";
+import { FilterProps, CategoryProps } from "@/app/types";
 
 interface NutrientRange {
   min: number;
@@ -25,11 +24,11 @@ export default function SidebarFilter({
 }: FilterProps & { categories: CategoryProps[] }) {
   const [calories, setCalories] = useState<NutrientRange>({
     min: 0,
-    max: 2000,
+    max: 1000,
   });
-  const [protein, setProtein] = useState<NutrientRange>({ min: 0, max: 200 });
-  const [carbs, setCarbs] = useState<NutrientRange>({ min: 0, max: 200 });
-  const [fats, setFats] = useState<NutrientRange>({ min: 0, max: 200 });
+  const [protein, setProtein] = useState<NutrientRange>({ min: 0, max: 100 });
+  const [carbs, setCarbs] = useState<NutrientRange>({ min: 0, max: 100 });
+  const [fats, setFats] = useState<NutrientRange>({ min: 0, max: 100 });
   const [difficulty, setDifficulty] = useState<string>("all");
   const [category, setCategory] = useState<string>("all");
 
@@ -39,7 +38,7 @@ export default function SidebarFilter({
         category === "all" || recipe.category.category === category;
 
       const matchesDifficulty =
-        difficulty === "all" || recipe.difficulty.toLowerCase() === difficulty;
+        difficulty === "all" || recipe.difficulty === difficulty;
 
       return (
         recipe.calories >= calories.min &&
@@ -60,7 +59,17 @@ export default function SidebarFilter({
     setFilteredRecipes(filteredRecipes);
   }, [filteredRecipes, setFilteredRecipes]);
 
+  // Debounce utility
+  const debounce = (func: (...args: any) => void, timeout = 300) => {
+    let timer: NodeJS.Timeout;
+    return (...args: any) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(...args), timeout);
+    };
+  };
+
   // RangeSlider component
+
   const RangeSlider = ({
     label,
     value,
@@ -74,16 +83,24 @@ export default function SidebarFilter({
     max: number;
     step: number;
   }) => {
+    const [internalValue, setInternalValue] = useState(value);
+
+    // Debounce state update to prevent constant re-renders
+    const debouncedOnChange = useMemo(
+      () => debounce((newValue: NutrientRange) => onChange(newValue), 300),
+      [onChange]
+    );
+
     const handleInputChange = (type: "min" | "max", inputValue: string) => {
       const numValue = Number(inputValue);
       if (!isNaN(numValue)) {
-        onChange({
-          ...value,
-          [type]:
-            type === "min"
-              ? Math.min(numValue, value.max)
-              : Math.max(numValue, value.min),
-        });
+        const updatedValue =
+          type === "min"
+            ? { ...internalValue, min: Math.min(numValue, internalValue.max) }
+            : { ...internalValue, max: Math.max(numValue, internalValue.min) };
+
+        setInternalValue(updatedValue); // Update local input state immediately
+        debouncedOnChange(updatedValue); // Debounce the global state update
       }
     };
 
@@ -98,8 +115,8 @@ export default function SidebarFilter({
             id={`${label}-min`}
             type="number"
             min={0}
-            max={value.max}
-            value={value.min}
+            max={internalValue.max}
+            value={internalValue.min}
             onChange={(e) => handleInputChange("min", e.target.value)}
             className="w-20"
           />
@@ -109,9 +126,9 @@ export default function SidebarFilter({
           <Input
             id={`${label}-max`}
             type="number"
-            min={value.min}
+            min={internalValue.min}
             max={max}
-            value={value.max}
+            value={internalValue.max}
             onChange={(e) => handleInputChange("max", e.target.value)}
             className="w-20"
           />
@@ -120,10 +137,12 @@ export default function SidebarFilter({
           min={0}
           max={max}
           step={step}
-          value={[value.min, value.max]}
-          onValueChange={(newValue) =>
-            onChange({ min: newValue[0], max: newValue[1] })
-          }
+          value={[internalValue.min, internalValue.max]}
+          onValueChange={(newValue) => {
+            const updatedValue = { min: newValue[0], max: newValue[1] };
+            setInternalValue(updatedValue); // Update slider state locally
+            debouncedOnChange(updatedValue); // Debounce global state update
+          }}
           className="mt-2"
         />
       </div>
@@ -131,22 +150,45 @@ export default function SidebarFilter({
   };
 
   return (
-    <Card className="w-80">
-      <CardContent className="space-y-6">
-        <div className="space-y-2">
+    <Card className="w-[400px]">
+      <CardContent className="space-y-6 flex flex-col items-start gap-4">
+        <div className="category-filter space-y-2">
           <Label>Recipe Categories</Label>
-          <RadioGroup value={category} onValueChange={setCategory}>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="all" id="all" />
-              <Label htmlFor="all">All</Label>
+          {/* Category radio group */}
+          <form>
+            <div className="category-item flex items-center space-x-2">
+              <input
+                name="category"
+                type="radio"
+                value="all"
+                id="all"
+                checked={category === "all"}
+                onChange={(e) => setCategory(e.target.value)} // Update the state when the value changes
+              />
+              <label className="category-text" htmlFor="all">
+                All
+              </label>
             </div>
+
             {categories.map((cat) => (
-              <div key={cat.id} className="flex items-center space-x-2">
-                <RadioGroupItem value={cat.category} id={cat.category} />
-                <Label htmlFor={cat.category}>{cat.category}</Label>
+              <div
+                key={cat.id}
+                className="category-item flex items-center space-x-2"
+              >
+                <input
+                  name="category"
+                  type="radio"
+                  value={cat.category}
+                  id={cat.category}
+                  checked={category === cat.category} // Checks if the current category matches the selected one
+                  onChange={(e) => setCategory(e.target.value)} // Update the state when the value changes
+                />
+                <label className="category-text" htmlFor={cat.category}>
+                  {cat.category}
+                </label>
               </div>
             ))}
-          </RadioGroup>
+          </form>
         </div>
 
         {/* Min-Max Range Sliders */}
@@ -154,7 +196,7 @@ export default function SidebarFilter({
           label="Calories"
           value={calories}
           onChange={setCalories}
-          max={2000}
+          max={1000}
           step={100}
         />
 
@@ -162,7 +204,7 @@ export default function SidebarFilter({
           label="Protein (g)"
           value={protein}
           onChange={setProtein}
-          max={200}
+          max={100}
           step={20}
         />
 
@@ -170,7 +212,7 @@ export default function SidebarFilter({
           label="Carbs (g)"
           value={carbs}
           onChange={setCarbs}
-          max={200}
+          max={100}
           step={20}
         />
 
@@ -178,7 +220,7 @@ export default function SidebarFilter({
           label="Fats (g)"
           value={fats}
           onChange={setFats}
-          max={200}
+          max={100}
           step={20}
         />
         <div className="space-y-2">

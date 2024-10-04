@@ -1,4 +1,4 @@
-import { RecipeProps, CategoryProps } from "./types";
+import { RecipeProps, CategoryProps } from "@/app/types";
 import {
   Hero,
   Categories,

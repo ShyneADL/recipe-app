@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { CustomButton, CustomFilter, SearchBar } from "@/app/components";
+import { SearchBar } from "@/app/components";
 
 const Hero = () => {
   const handleScroll = () => {

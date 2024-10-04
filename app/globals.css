@@ -59,6 +59,20 @@ ul > li > a:hover {
   color: #fc0000;
 }
 
+input[type="radio"] {
+  accent-color: var(--primary-red); /* Set your desired color here */
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 /* END: General styles */
 
 /* START: Hero styles */
@@ -97,16 +111,6 @@ ul > li > a:hover {
   @apply mt-16 flex justify-center items-center flex-col gap-2;
 }
 /* END: Home styles */
-
-/* START: Custom Filter styles */
-.custom-filter__btn {
-  @apply relative w-full min-w-[127px] flex justify-between items-center cursor-default rounded-lg bg-white py-2 px-3 text-left shadow-md sm:text-sm border;
-}
-
-.custom-filter__options {
-  @apply absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm;
-}
-/* END: Custom Filter styles */
 
 /* START: Footer styles */
 .footer {
@@ -212,7 +216,7 @@ ul > li > a:hover {
 }
 
 .recipe-info-title {
-  @apply ~text-[20px]/[32px] text-black font-bold text-left tracking-normal leading-normal;
+  @apply ~text-[20px]/[32px] text-primary-red font-bold text-left tracking-normal leading-normal;
 }
 
 .recipe-small-text {
@@ -256,10 +260,52 @@ ul > li > a:hover {
 
 /* START: Sidebar filter styles */
 .sidebar {
-  @apply flex flex-col items-start justify-around mb-2;
+  @apply flex flex-col items-start gap-3 mb-2;
   border-top: 1px solid var(--light-grey);
   border-bottom: 1px solid var(--light-grey);
 }
+
+.sidebar-wrapper {
+  border-top: 1px solid var(--light-grey);
+  height: 100vh;
+  width: 400px;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-color: var(--primary-red) var(--primary-red-100);
+}
+
+.sidebar-wrapper::-webkit-scrollbar {
+  width: 12px;
+}
+
+.sidebar-wrapper::-webkit-scrollbar-thumb {
+  background: var(--primary-red);
+  border-radius: 20px;
+}
+
+.category-filter {
+  height: 180px;
+  width: 400px;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: scroll;
+}
+
+.category-item {
+  background-color: #fff;
+  padding: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in;
+}
+
+.category-item:hover {
+  background-color: var(--light-grey);
+}
+
+.category-text {
+  @apply text-[1rem] text-black text-left font-normal;
+}
+
 /* END: Sidebar filter styles */
 
 @layer base {
@@ -270,7 +316,7 @@ ul > li > a:hover {
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
+    --primary: 0 100% 49%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;

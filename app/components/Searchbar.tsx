@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import SearchRecipe from "./SearchRecipe";
-import { RecipeProps } from "../types";
+import { RecipeProps } from "@/app/types";
 
 const SearchBar = () => {
   const [recipes, setRecipes] = useState<RecipeProps[]>([]); // Store fetched recipes
