@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useSearchParams, useRouter } from "next/navigation"; // Import the necessary hooks
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -31,6 +32,15 @@ export default function SidebarFilter({
   const [fats, setFats] = useState<NutrientRange>({ min: 0, max: 100 });
   const [difficulty, setDifficulty] = useState<string>("all");
   const [category, setCategory] = useState<string>("all");
+
+  const searchParams = useSearchParams(); // Get the current URL search params
+  const router = useRouter();
+
+  // Synchronize category with the URL query param
+  useEffect(() => {
+    const urlCategory = searchParams.get("category") || "all";
+    setCategory(urlCategory);
+  }, [searchParams]);
 
   const filteredRecipes = useMemo(() => {
     return recipes.filter((recipe) => {
@@ -69,7 +79,6 @@ export default function SidebarFilter({
   };
 
   // RangeSlider component
-
   const RangeSlider = ({
     label,
     value,
@@ -163,7 +172,10 @@ export default function SidebarFilter({
                 value="all"
                 id="all"
                 checked={category === "all"}
-                onChange={(e) => setCategory(e.target.value)} // Update the state when the value changes
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  router.push(`/search`);
+                }} // Update the state and URL when the value changes
               />
               <label className="category-text" htmlFor="all">
                 All
@@ -181,7 +193,10 @@ export default function SidebarFilter({
                   value={cat.category}
                   id={cat.category}
                   checked={category === cat.category} // Checks if the current category matches the selected one
-                  onChange={(e) => setCategory(e.target.value)} // Update the state when the value changes
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                    router.push(`/search?category=${e.target.value}`); // Update the URL when the value changes
+                  }}
                 />
                 <label className="category-text" htmlFor={cat.category}>
                   {cat.category}

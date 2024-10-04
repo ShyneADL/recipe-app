@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { useSearchParams, usePathname } from "next/navigation";
 import SidebarFilter from "@/app/components/SidebarFilter";
 import "./search.modules.css";
 import { RecipeProps, CategoryProps } from "@/app/types";
@@ -19,7 +20,7 @@ const Page = () => {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 12; // 15 recipes per page
+  const pageSize = 12; // 12 recipes per page
 
   const openModal = (recipe: RecipeProps) => {
     setSelectedRecipe(recipe);
@@ -70,7 +71,7 @@ const Page = () => {
     fetchRecipes();
   }, []);
 
-  // Calculate the index of the first and last recipe on the current page
+  // Pagination logic
   const indexOfLastRecipe = currentPage * pageSize;
   const indexOfFirstRecipe = indexOfLastRecipe - pageSize;
   const currentRecipes = filteredRecipes.slice(
@@ -78,11 +79,24 @@ const Page = () => {
     indexOfLastRecipe
   );
 
-  // Change page function
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  // Calculate total pages
   const totalPages = Math.ceil(filteredRecipes.length / pageSize);
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const categoryParam = searchParams.get("category");
+
+  useEffect(() => {
+    if (categoryParam) {
+      // Apply the filter based on the category from the query parameter
+      const filteredByCategory = recipes.filter(
+        (recipe) =>
+          recipe.category.category.toLowerCase() === categoryParam.toLowerCase()
+      );
+      setFilteredRecipes(filteredByCategory);
+    }
+  }, [categoryParam, recipes]);
 
   return (
     <div className="flex items-start gap-6 padding-x max-width">

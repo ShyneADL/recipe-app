@@ -1,16 +1,18 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation"; // Correct useRouter import
 import { CategoryProps } from "@/app/types";
 
 interface CategorySectionProps {
   categories: CategoryProps[];
 }
+
 const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
   const [showLeftIcon, setShowLeftIcon] = useState(false);
   const [showRightIcon, setShowRightIcon] = useState(true);
-
   const scrollRef = useRef<HTMLDivElement>(null);
+  const router = useRouter(); // Initialize the router
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -52,6 +54,11 @@ const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
     };
   }, []);
 
+  const handleCategoryClick = (category: string) => {
+    // Navigate to the filter page with the category as a query parameter
+    router.push(`/search?category=${category}`);
+  };
+
   return (
     <div className="mt-12 padding-x padding-y max-width" id="discover">
       <div className="categories-container">
@@ -62,7 +69,7 @@ const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
           <div
             onClick={scrollLeft}
             className={`${
-              showLeftIcon ? "visible" : "invisible"
+              showLeftIcon ? "visible" : "hidden"
             } p-4 bg-transparent hover:bg-gray-300 icon_box rounded-full`}
           >
             <Image
@@ -81,6 +88,7 @@ const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
                 <div
                   key={category.id}
                   className="p-3 flex flex-col items-center gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer w-[200px]"
+                  onClick={() => handleCategoryClick(category.category)} // Handle click event
                 >
                   <div className="rounded-full w-[200px]">
                     <Image
@@ -109,7 +117,7 @@ const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
           >
             <Image
               src="/icon-right.svg"
-              alt="previous icon"
+              alt="next icon"
               width={100}
               height={100}
             />

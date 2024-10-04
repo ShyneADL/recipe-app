@@ -203,12 +203,24 @@ input[type="number"] {
 /* END: Trending recipes section */
 
 /* START: Recipe details section */
+.details-wrapper {
+  scrollbar-width: none;
+}
+
+.details-wrapper::-webkit-scrollbar {
+  display: none;
+}
 .recipe-image {
   @apply object-cover aspect-video rounded-xl w-full;
 }
 
 .recipe-infobox {
   @apply flex items-center gap-1 rounded-3xl bg-black p-3;
+  scrollbar-width: none;
+}
+
+.recipe-infobox::-webkit-scrollbar {
+  display: none;
 }
 
 .recipe-infotext {
@@ -272,11 +284,11 @@ input[type="number"] {
   -webkit-overflow-scrolling: touch;
   overflow-y: scroll;
   overflow-x: hidden;
-  scrollbar-color: var(--primary-red) var(--primary-red-100);
+  scrollbar-width: none;
 }
 
 .sidebar-wrapper::-webkit-scrollbar {
-  width: 12px;
+  display: none;
 }
 
 .sidebar-wrapper::-webkit-scrollbar-thumb {
