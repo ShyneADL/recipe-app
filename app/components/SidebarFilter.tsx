@@ -161,10 +161,10 @@ export default function SidebarFilter({
   return (
     <Card className="w-[400px]">
       <CardContent className="space-y-6 flex flex-col items-start gap-4">
-        <div className="category-filter space-y-2">
+        <div className="space-y-2">
           <Label>Recipe Categories</Label>
           {/* Category radio group */}
-          <form>
+          <form className="category-filter">
             <div className="category-item flex items-center space-x-2">
               <input
                 name="category"
