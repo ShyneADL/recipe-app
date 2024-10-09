@@ -53,6 +53,10 @@
   @apply text-4xl font-extrabold text-primary-red;
 }
 
+img {
+  @apply select-none;
+}
+
 ul > li > a {
   transition: color 0.4s ease;
 }

@@ -9,7 +9,7 @@ interface NavLinks {
   link: string;
 }
 const NavBar = () => (
-  <header className=" w-full flex items-center justify-center">
+  <header className="w-full flex items-center justify-center py-4">
     <nav className="flex justify-between items-center sm:px-16 px-6 py-4 bg-transparent max-w-[1440px] w-full">
       <Link href="/" className="flex justify-center items-center">
         <Image
