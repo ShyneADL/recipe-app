@@ -205,7 +205,6 @@ export default function SidebarFilter({
             ))}
           </form>
         </div>
-
         {/* Min-Max Range Sliders */}
         <RangeSlider
           label="Calories"
@@ -214,7 +213,6 @@ export default function SidebarFilter({
           max={1000}
           step={100}
         />
-
         <RangeSlider
           label="Protein (g)"
           value={protein}
@@ -230,7 +228,6 @@ export default function SidebarFilter({
           max={100}
           step={20}
         />
-
         <RangeSlider
           label="Fats (g)"
           value={fats}

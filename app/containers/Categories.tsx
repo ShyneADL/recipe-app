@@ -64,13 +64,14 @@ const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
       <div className="categories-container">
         <h1 className="big-text">Explore recipes by categories</h1>
         {/* The category section */}
-        <div className="flex items-center gap-5 select-none w-full">
+        <div className="relative flex items-center gap-5 select-none max-w-[1320px]">
           {/* Left icon */}
-          <div
+          <button
             onClick={scrollLeft}
-            className={`${
-              showLeftIcon ? "visible" : "hidden"
-            } p-4 bg-transparent hover:bg-gray-300 icon_box rounded-full`}
+            className={`absolute -left-40 top-1/2 -translate-y-1/2 z-10 p-4 bg-white/80 hover:bg-gray-300 rounded-full transition-opacity ${
+              showLeftIcon ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+            aria-hidden={!showLeftIcon}
           >
             <Image
               src="/icon-left.svg"
@@ -78,16 +79,16 @@ const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
               width={100}
               height={100}
             />
-          </div>
+          </button>
           <div
             ref={scrollRef}
-            className="flex items-center gap-5 overflow-x-scroll scrollbar w-full"
+            className="flex items-center gap-5 overflow-x-scroll scrollbar max-w-[1000px]"
           >
             {categories.length > 0 ? (
               categories.map((category: CategoryProps) => (
                 <div
                   key={category.id}
-                  className="p-3 flex flex-col items-center gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer w-[200px]"
+                  className="p-3 flex flex-col flex-shrink-0 items-center gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer w-[200px]"
                   onClick={() => handleCategoryClick(category.category)} // Handle click event
                 >
                   <div className="rounded-full w-[200px]">
@@ -109,11 +110,12 @@ const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
             )}
           </div>
           {/* Right icon */}
-          <div
+          <button
             onClick={scrollRight}
-            className={`${
-              showRightIcon ? "visible" : "invisible"
-            } p-4 bg-transparent hover:bg-gray-300 icon_box rounded-full`}
+            className={`absolute -right-40 top-1/2 -translate-y-1/2 z-10 p-4 bg-white/80 hover:bg-gray-300 rounded-full transition-opacity ${
+              showRightIcon ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+            aria-hidden={!showRightIcon}
           >
             <Image
               src="/icon-right.svg"
@@ -121,7 +123,7 @@ const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
               width={100}
               height={100}
             />
-          </div>
+          </button>
         </div>
       </div>
     </div>

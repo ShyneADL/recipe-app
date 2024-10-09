@@ -1,12 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { useSearchParams, usePathname } from "next/navigation";
 import SidebarFilter from "@/app/components/SidebarFilter";
 import "./search.modules.css";
 import { RecipeProps, CategoryProps } from "@/app/types";
-import { RecipeDetails } from "@/app/components";
-import { getChefHatCount } from "@/app/utils";
+import { RecipeCard } from "@/app/components";
+
 import { SearchBar } from "@/app/components";
 
 const Page = () => {
@@ -18,9 +17,8 @@ const Page = () => {
     null
   );
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 12; // 12 recipes per page
+  const pageSize = 12;
 
   const openModal = (recipe: RecipeProps) => {
     setSelectedRecipe(recipe);
@@ -111,67 +109,7 @@ const Page = () => {
         <ul className="recipe-container">
           {currentRecipes.length > 0 ? (
             currentRecipes.map((recipe) => {
-              const chefHatCount = getChefHatCount(recipe.difficulty);
-              return (
-                <div
-                  key={recipe.id}
-                  onClick={() => openModal(recipe)}
-                  className="recipe-item"
-                >
-                  <Image
-                    src={recipe.image}
-                    alt={recipe.recipe}
-                    width={200}
-                    height={112.5}
-                    className="recipe-image"
-                  />
-                  <h3 className="recipe-name">{recipe.recipe}</h3>
-
-                  <p className="recipe-text">
-                    Calories:{" "}
-                    <span className="text-grey">{recipe.calories} kcal</span>{" "}
-                  </p>
-
-                  <p className="recipe-text">
-                    {recipe.cook_time_in_minutes === 0
-                      ? "Prep time"
-                      : "Cooking time"}
-                    :{" "}
-                    <span className="text-grey">
-                      {recipe.cook_time_in_minutes === 0
-                        ? recipe.prep_time_in_minutes
-                        : recipe.cook_time_in_minutes}{" "}
-                      min
-                    </span>
-                  </p>
-
-                  {/* Render Chef Hats Based on Difficulty */}
-                  <div className="flex items-center justify-between w-[175px]">
-                    <p className="recipe-text">Difficulty:</p>
-                    <div className="flex items-center justify-start gap-[6px] w-[100px]">
-                      {Array.from({ length: chefHatCount }).map((_, index) => (
-                        <Image
-                          key={index}
-                          src="/chef.png"
-                          alt="chef hat icon"
-                          width={25}
-                          height={25}
-                          className="chef-hat"
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Recipe Details Modal */}
-                  {selectedRecipe && (
-                    <RecipeDetails
-                      isOpen={isOpen}
-                      closeModal={closeModal}
-                      recipe={selectedRecipe}
-                    />
-                  )}
-                </div>
-              );
+              return <RecipeCard key={recipe.id} recipe={recipe} />;
             })
           ) : (
             <li>There are no recipes that match your filter.</li>
