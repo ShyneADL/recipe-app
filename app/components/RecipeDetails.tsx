@@ -23,6 +23,17 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({
   const directions = gatherDirections(recipe);
   const ingredients = gatherIngredientsAndMeasurements(recipe);
   const chefHatCount = getChefHatCount(recipe.difficulty);
+  const time = () => {
+    if (
+      recipe.cook_time_in_minutes === null &&
+      recipe.prep_time_in_minutes === null
+    ) {
+      return 0;
+    }
+    return (
+      (recipe.cook_time_in_minutes || 0) + (recipe.prep_time_in_minutes || 0)
+    );
+  };
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -93,12 +104,7 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({
                     </div>
                     {/* Prep time */}
                     <div className="recipe-infobox">
-                      <p className="recipe-infotext">
-                        {recipe.cook_time_in_minutes === 0
-                          ? recipe.prep_time_in_minutes
-                          : recipe.cook_time_in_minutes}{" "}
-                        min
-                      </p>
+                      <p className="recipe-infotext">{time()} min</p>
                     </div>
                     {/* Category */}
                     <div className="recipe-infobox">

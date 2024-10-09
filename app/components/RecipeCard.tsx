@@ -24,8 +24,19 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
     setIsOpen(false);
     setSelectedRecipe(null);
   };
-  const chefHatCount = getChefHatCount(recipe.difficulty); // Get chef hat count for each recipe
+  const time = () => {
+    if (
+      recipe.cook_time_in_minutes === null &&
+      recipe.prep_time_in_minutes === null
+    ) {
+      return 0;
+    }
+    return (
+      (recipe.cook_time_in_minutes || 0) + (recipe.prep_time_in_minutes || 0)
+    );
+  };
 
+  const chefHatCount = getChefHatCount(recipe.difficulty); // Get chef hat count for each recipe
   return (
     <div
       key={recipe.id}
@@ -47,12 +58,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 
       <p className="recipe-text">
         {recipe.cook_time_in_minutes === 0 ? "Prep time" : "Cooking time"}:{" "}
-        <span className="text-grey">
-          {recipe.cook_time_in_minutes === 0
-            ? recipe.prep_time_in_minutes
-            : recipe.cook_time_in_minutes}{" "}
-          min
-        </span>
+        <span className="text-grey">{time()} min</span>
       </p>
 
       {/* Render Chef Hats Based on Difficulty */}

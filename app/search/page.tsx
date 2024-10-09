@@ -12,23 +12,9 @@ const Page = () => {
   const [recipes, setRecipes] = useState<RecipeProps[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<RecipeProps[]>([]);
   const [categories, setCategories] = useState<CategoryProps[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedRecipe, setSelectedRecipe] = useState<RecipeProps | null>(
-    null
-  );
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 12;
-
-  const openModal = (recipe: RecipeProps) => {
-    setSelectedRecipe(recipe);
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-    setSelectedRecipe(null);
-  };
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -118,17 +104,70 @@ const Page = () => {
 
         {/* Pagination Controls */}
         <div className="pagination">
-          {Array.from({ length: totalPages }).map((_, index) => (
+          {/* Previous Button */}
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="pagination-btn"
+          >
+            Previous
+          </button>
+
+          {/* First Page */}
+          <button
+            onClick={() => paginate(1)}
+            className={`pagination-btn ${
+              currentPage === 1 ? "active text-primary-red" : ""
+            }`}
+          >
+            1
+          </button>
+
+          {/* Show ellipsis if totalPages > 9 and currentPage is greater than 3 */}
+          {totalPages > 9 && currentPage > 3 && <span>...</span>}
+
+          {/* Pages around currentPage: 2, 3, and 4 */}
+          {Array.from({ length: 9 }).map((_, index) => {
+            const page = currentPage - 1 + index;
+            if (page > 1 && page < totalPages) {
+              return (
+                <button
+                  key={page}
+                  onClick={() => paginate(page)}
+                  className={`pagination-btn ${
+                    currentPage === page ? "active text-primary-red" : ""
+                  }`}
+                >
+                  {page}
+                </button>
+              );
+            }
+            return null;
+          })}
+
+          {/* Show ellipsis before the last page if totalPages > 9 and currentPage is less than totalPages - 2 */}
+          {totalPages > 9 && currentPage < totalPages - 2 && <span>...</span>}
+
+          {/* Last Page */}
+          {totalPages > 1 && (
             <button
-              key={index}
-              onClick={() => paginate(index + 1)}
-              className={`pagination-button ${
-                currentPage === index + 1 ? "active" : ""
+              onClick={() => paginate(totalPages)}
+              className={`pagination-btn ${
+                currentPage === totalPages ? "active text-primary-red" : ""
               }`}
             >
-              {index + 1}
+              {totalPages}
             </button>
-          ))}
+          )}
+
+          {/* Next Button */}
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="pagination-btn"
+          >
+            Next
+          </button>
         </div>
       </main>
     </div>

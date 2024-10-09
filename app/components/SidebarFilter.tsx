@@ -30,7 +30,7 @@ export default function SidebarFilter({
   const [protein, setProtein] = useState<NutrientRange>({ min: 0, max: 100 });
   const [carbs, setCarbs] = useState<NutrientRange>({ min: 0, max: 100 });
   const [fats, setFats] = useState<NutrientRange>({ min: 0, max: 100 });
-  const [difficulty, setDifficulty] = useState<string>("all");
+  const [difficulty, setDifficulty] = useState<string>("All");
   const [category, setCategory] = useState<string>("all");
 
   const searchParams = useSearchParams(); // Get the current URL search params
@@ -48,7 +48,7 @@ export default function SidebarFilter({
         category === "all" || recipe.category.category === category;
 
       const matchesDifficulty =
-        difficulty === "all" || recipe.difficulty === difficulty;
+        difficulty === "All" || recipe.difficulty === difficulty;
 
       return (
         recipe.calories >= calories.min &&
@@ -69,6 +69,16 @@ export default function SidebarFilter({
     setFilteredRecipes(filteredRecipes);
   }, [filteredRecipes, setFilteredRecipes]);
 
+  // Function to reset all filters to default
+  const resetFilters = () => {
+    setCalories({ min: 0, max: 1000 });
+    setProtein({ min: 0, max: 100 });
+    setCarbs({ min: 0, max: 100 });
+    setFats({ min: 0, max: 100 });
+    setDifficulty("all");
+    setCategory("all");
+    router.push(`/search`); // Reset the URL to remove query params
+  };
   // Debounce utility
   const debounce = (func: (...args: any) => void, timeout = 300) => {
     let timer: NodeJS.Timeout;
@@ -242,10 +252,10 @@ export default function SidebarFilter({
               <SelectValue placeholder="Select difficulty" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="easy">Easy</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="difficult">Difficult</SelectItem>
+              <SelectItem value="All">All</SelectItem>
+              <SelectItem value="Easy">Easy</SelectItem>
+              <SelectItem value="Medium">Medium</SelectItem>
+              <SelectItem value="Difficult">Difficult</SelectItem>
             </SelectContent>
           </Select>
         </div>

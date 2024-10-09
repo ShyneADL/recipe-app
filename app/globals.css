@@ -8,6 +8,7 @@
   --black-100: #2b2c35;
   --light-grey: #e6e6ea;
   --primary-red-100: #f1e8e8;
+  --primary-red-300: #ff7575;
   --primary-red: #fc0000;
   --secondary-orange: #f79761;
   --light-white-100: rgba(59, 60, 152, 0.02);
@@ -316,6 +317,18 @@ input[type="number"] {
 
 .category-text {
   @apply text-[1rem] text-black text-left font-normal;
+}
+
+.pagination {
+  @apply flex items-center justify-center mt-10 w-full;
+}
+
+.pagination-btn {
+  @apply rounded-[8px] p-3 text-[18px] font-medium hover:bg-lightGrey;
+}
+
+.pagination-btn:disabled {
+  @apply text-lightGrey;
 }
 
 /* END: Sidebar filter styles */
