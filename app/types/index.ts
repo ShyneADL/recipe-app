@@ -64,10 +64,6 @@ export interface FilterProps {
   setFilteredRecipes: (filteredRecipes: RecipeProps[]) => void;
 }
 
-export interface HomeProps {
-  searchParams: FilterProps;
-}
-
 export interface CustomButtonProps {
   isDisabled?: boolean;
   btnType?: "button" | "submit";
@@ -76,21 +72,6 @@ export interface CustomButtonProps {
   title: string;
   rightIcon?: string;
   handleClick?: MouseEventHandler<HTMLButtonElement>;
-}
-
-export interface OptionProps {
-  title: string;
-  value: string;
-}
-
-export interface CustomFilterProps {
-  title: string;
-  options: OptionProps[];
-}
-
-export interface ShowMoreProps {
-  pageNumber: number;
-  isNext: boolean;
 }
 
 export interface SearchRecipeProps {

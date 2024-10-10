@@ -56,7 +56,7 @@ const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
 
   const handleCategoryClick = (category: string) => {
     // Navigate to the filter page with the category as a query parameter
-    router.push(`/search?category=${category}`);
+    router.push(`/discover?category=${category}`);
   };
 
   return (

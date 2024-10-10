@@ -23,7 +23,6 @@ const Page = () => {
           return;
         }
 
-        // Fetch all recipes from your API
         const response = await fetch("https://keto-diet.p.rapidapi.com/", {
           headers: {
             "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",

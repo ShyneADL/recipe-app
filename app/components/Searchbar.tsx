@@ -1,19 +1,24 @@
 "use client";
 
-import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-
+import { useRouter, useSearchParams } from "next/navigation";
 import SearchRecipe from "./SearchRecipe";
 import { RecipeProps } from "@/app/types";
 
 const SearchBar = () => {
-  const [recipes, setRecipes] = useState<RecipeProps[]>([]); // Store fetched recipes
-  const [recipe, setRecipe] = useState<RecipeProps | null>(null); // Store selected recipe
-
+  const [recipes, setRecipes] = useState<RecipeProps[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  // Fetch recipes from the API on mount
+  // Initialize searchQuery from URL params if they exist
+  useEffect(() => {
+    const queryParam = searchParams.get("q");
+    if (queryParam) {
+      setSearchQuery(queryParam);
+    }
+  }, [searchParams]);
+
   useEffect(() => {
     const fetchRecipes = async () => {
       const url = "https://keto-diet.p.rapidapi.com/";
@@ -30,10 +35,8 @@ const SearchBar = () => {
         if (!response.ok) {
           throw new Error("Failed to fetch recipes");
         }
-        const result = await response.json(); // Assuming the API returns JSON
-
-        // Assuming result contains an array of recipes, transform it if needed
-        setRecipes(result); // Update with fetched recipes
+        const result = await response.json();
+        setRecipes(result);
       } catch (error) {
         console.error(error);
       }
@@ -45,32 +48,43 @@ const SearchBar = () => {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Ensure a recipe is selected and has a name
-    if (!recipe || !recipe.recipe.trim()) {
+    if (!searchQuery.trim()) {
       return alert("Please provide some input");
     }
 
-    updateSearchParams(recipe.recipe.toLowerCase());
+    navigateToSearch(searchQuery.toLowerCase());
   };
 
-  const updateSearchParams = (recipeString: string) => {
-    const searchParams = new URLSearchParams(window.location.search);
-
-    if (recipeString) {
-      searchParams.set("recipe", recipeString);
-    } else {
-      searchParams.delete("recipe");
+  const handleRecipeSelect = (recipe: RecipeProps | null) => {
+    if (recipe) {
+      navigateToSearch(recipe.recipe.toLowerCase());
     }
+  };
 
-    const newPathname = `${
-      window.location.pathname
-    }?${searchParams.toString()}`;
-    router.push(newPathname);
+  const navigateToSearch = (query: string) => {
+    // When searching, only include the search query parameter
+    // This effectively resets any category filter
+    const newParams = new URLSearchParams();
+    newParams.set("q", query);
+
+    router.push(`/search?${newParams.toString()}`);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    // When clearing the search, remove all parameters and return to base search page
+    router.push("/search");
   };
 
   return (
     <form className="searchbar" onSubmit={handleSearch}>
-      <SearchRecipe recipes={recipes} setRecipe={setRecipe} />{" "}
+      <SearchRecipe
+        recipes={recipes}
+        onSelect={handleRecipeSelect}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        onClear={clearSearch}
+      />
     </form>
   );
 };

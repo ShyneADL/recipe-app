@@ -77,7 +77,7 @@ export default function SidebarFilter({
     setFats({ min: 0, max: 100 });
     setDifficulty("all");
     setCategory("all");
-    router.push(`/search`); // Reset the URL to remove query params
+    router.push(`/discover`); // Reset the URL to remove query params
   };
   // Debounce utility
   const debounce = (func: (...args: any) => void, timeout = 300) => {
@@ -175,7 +175,7 @@ export default function SidebarFilter({
           <Label>Recipe Categories</Label>
           {/* Category radio group */}
           <form className="category-filter">
-            <div className="category-item flex items-center space-x-2">
+            <div className="category-item ">
               <input
                 name="category"
                 type="radio"
@@ -184,7 +184,7 @@ export default function SidebarFilter({
                 checked={category === "all"}
                 onChange={(e) => {
                   setCategory(e.target.value);
-                  router.push(`/search`);
+                  router.push(`/discover`);
                 }} // Update the state and URL when the value changes
               />
               <label className="category-text" htmlFor="all">
@@ -205,7 +205,7 @@ export default function SidebarFilter({
                   checked={category === cat.category} // Checks if the current category matches the selected one
                   onChange={(e) => {
                     setCategory(e.target.value);
-                    router.push(`/search?category=${e.target.value}`); // Update the URL when the value changes
+                    router.push(`/discover?category=${e.target.value}`); // Update the URL when the value changes
                   }}
                 />
                 <label className="category-text" htmlFor={cat.category}>

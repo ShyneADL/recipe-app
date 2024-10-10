@@ -187,7 +187,7 @@ input[type="number"] {
 
 /* START: Trending recipes section */
 .recipe-container {
-  @apply flex flex-wrap items-center justify-between w-full;
+  @apply flex flex-wrap items-start gap-[2px] w-full;
   row-gap: 60px;
 }
 .recipe-item {
@@ -302,16 +302,14 @@ input[type="number"] {
 }
 
 .category-filter {
-  height: 180px;
-  width: 400px;
+  @apply h-[170px] w-[400px];
+
   -webkit-overflow-scrolling: touch;
   overflow-y: scroll;
 }
 
 .category-item {
-  background-color: #fff;
-  padding: 6px;
-  cursor: pointer;
+  @apply flex items-center p-[8px] cursor-pointer bg-[#fff] rounded-[6px] space-x-2;
   transition: background-color 0.3s ease-in;
 }
 

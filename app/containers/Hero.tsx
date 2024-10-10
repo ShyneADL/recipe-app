@@ -23,7 +23,7 @@ const Hero = () => {
             <span className="text-primary-red">Connect</span> with Foodies
             around the world.
           </h1>
-          <div className="home__filters">
+          <div className="w-full max-w-3xl mx-auto mb-6">
             <SearchBar />
           </div>
 

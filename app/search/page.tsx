@@ -1,177 +1,179 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useSearchParams, usePathname } from "next/navigation";
-import SidebarFilter from "@/app/components/SidebarFilter";
-import "./search.modules.css";
-import { RecipeProps, CategoryProps } from "@/app/types";
-import { RecipeCard } from "@/app/components";
+import { useSearchParams } from "next/navigation";
+import { RecipeProps } from "@/app/types";
+import { RecipeCard, SearchBar } from "@/app/components";
 
-import { SearchBar } from "@/app/components";
-
-const Page = () => {
+const SearchPage = () => {
   const [recipes, setRecipes] = useState<RecipeProps[]>([]);
-  const [filteredRecipes, setFilteredRecipes] = useState<RecipeProps[]>([]);
-  const [categories, setCategories] = useState<CategoryProps[]>([]);
-
+  const [displayedRecipes, setDisplayedRecipes] = useState<RecipeProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const pageSize = 12;
 
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("q");
+
+  // Reset pagination when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  // Fetch recipes once on component mount
   useEffect(() => {
     const fetchRecipes = async () => {
-      const url = "https://keto-diet.p.rapidapi.com/";
-      const options = {
-        method: "GET",
-        headers: {
-          "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
-          "x-rapidapi-host": "keto-diet.p.rapidapi.com",
-        },
-      };
-
+      setIsLoading(true);
       try {
+        const url = "https://keto-diet.p.rapidapi.com/";
+        const options = {
+          method: "GET",
+          headers: {
+            "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
+            "x-rapidapi-host": "keto-diet.p.rapidapi.com",
+          },
+        };
+
         const response = await fetch(url, options);
         if (!response.ok) {
           throw new Error("Failed to fetch recipes");
         }
         const result = await response.json();
-
-        setRecipes(result); // Update with fetched recipes
-        setFilteredRecipes(result); // Set initial filtered recipes
-
-        // Extract unique categories from recipes
-        const uniqueCategories = Array.from(
-          new Set(result.map((recipe: RecipeProps) => recipe.category.category))
-        ).map((category, index) => ({
-          id: index,
-          category: category as string,
-          thumbnail: "", // Assuming no thumbnail available for now
-        }));
-
-        setCategories(uniqueCategories); // Set categories
+        setRecipes(result);
+        setDisplayedRecipes(result); // Initially display all recipes
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchRecipes();
   }, []);
 
+  // Filter recipes when search query changes
+  useEffect(() => {
+    if (!searchQuery?.trim()) {
+      setDisplayedRecipes(recipes); // Show all recipes when no search query
+      return;
+    }
+
+    const filtered = recipes.filter((recipe) =>
+      recipe.recipe.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    setDisplayedRecipes(filtered);
+  }, [searchQuery, recipes]);
+
   // Pagination logic
   const indexOfLastRecipe = currentPage * pageSize;
   const indexOfFirstRecipe = indexOfLastRecipe - pageSize;
-  const currentRecipes = filteredRecipes.slice(
+  const currentRecipes = displayedRecipes.slice(
     indexOfFirstRecipe,
     indexOfLastRecipe
   );
+  const totalPages = Math.ceil(displayedRecipes.length / pageSize);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const totalPages = Math.ceil(filteredRecipes.length / pageSize);
-
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const categoryParam = searchParams.get("category");
-
-  useEffect(() => {
-    if (categoryParam) {
-      // Apply the filter based on the category from the query parameter
-      const filteredByCategory = recipes.filter(
-        (recipe) =>
-          recipe.category.category.toLowerCase() === categoryParam.toLowerCase()
-      );
-      setFilteredRecipes(filteredByCategory);
-    }
-  }, [categoryParam, recipes]);
-
   return (
-    <div className="flex items-start gap-6 padding-x max-width">
-      <div className="sidebar-wrapper">
-        <SidebarFilter
-          recipes={recipes}
-          setFilteredRecipes={setFilteredRecipes}
-          categories={categories}
-        />
+    <div className="flex flex-col items-start gap-6 padding-x max-width">
+      <div className="w-full max-w-3xl mx-auto mb-6">
+        <SearchBar />
       </div>
+
       <main className="w-full">
-        <ul className="recipe-container">
-          {currentRecipes.length > 0 ? (
-            currentRecipes.map((recipe) => {
-              return <RecipeCard key={recipe.id} recipe={recipe} />;
-            })
-          ) : (
-            <li>There are no recipes that match your filter.</li>
-          )}
-        </ul>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-40">
+            <span className="loading-spinner">Loading...</span>
+          </div>
+        ) : (
+          <>
+            {searchQuery && (
+              <div className="mb-4">
+                <h2 className="text-xl font-semibold">
+                  Search results for: "{searchQuery}"
+                </h2>
+                <p className="text-gray-600">
+                  Found {displayedRecipes.length} recipes
+                </p>
+              </div>
+            )}
 
-        {/* Pagination Controls */}
-        <div className="pagination">
-          {/* Previous Button */}
-          <button
-            onClick={() => paginate(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="pagination-btn"
-          >
-            Previous
-          </button>
+            <ul className="recipe-container">
+              {currentRecipes.length > 0 ? (
+                currentRecipes.map((recipe) => (
+                  <RecipeCard key={recipe.id} recipe={recipe} />
+                ))
+              ) : (
+                <li className="text-center w-full py-8">
+                  No recipes found matching your search.
+                </li>
+              )}
+            </ul>
 
-          {/* First Page */}
-          <button
-            onClick={() => paginate(1)}
-            className={`pagination-btn ${
-              currentPage === 1 ? "active text-primary-red" : ""
-            }`}
-          >
-            1
-          </button>
-
-          {/* Show ellipsis if totalPages > 9 and currentPage is greater than 3 */}
-          {totalPages > 9 && currentPage > 3 && <span>...</span>}
-
-          {/* Pages around currentPage: 2, 3, and 4 */}
-          {Array.from({ length: 9 }).map((_, index) => {
-            const page = currentPage - 1 + index;
-            if (page > 1 && page < totalPages) {
-              return (
+            {displayedRecipes.length > pageSize && (
+              <div className="pagination">
                 <button
-                  key={page}
-                  onClick={() => paginate(page)}
+                  onClick={() => paginate(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="pagination-btn"
+                >
+                  Previous
+                </button>
+
+                <button
+                  onClick={() => paginate(1)}
                   className={`pagination-btn ${
-                    currentPage === page ? "active text-primary-red" : ""
+                    currentPage === 1 ? "active text-primary-red" : ""
                   }`}
                 >
-                  {page}
+                  1
                 </button>
-              );
-            }
-            return null;
-          })}
 
-          {/* Show ellipsis before the last page if totalPages > 9 and currentPage is less than totalPages - 2 */}
-          {totalPages > 9 && currentPage < totalPages - 2 && <span>...</span>}
+                {Array.from({ length: Math.min(totalPages - 2, 7) }).map(
+                  (_, index) => {
+                    const page = index + 2;
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => paginate(page)}
+                        className={`pagination-btn ${
+                          currentPage === page ? "active text-primary-red" : ""
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  }
+                )}
 
-          {/* Last Page */}
-          {totalPages > 1 && (
-            <button
-              onClick={() => paginate(totalPages)}
-              className={`pagination-btn ${
-                currentPage === totalPages ? "active text-primary-red" : ""
-              }`}
-            >
-              {totalPages}
-            </button>
-          )}
+                {totalPages > 1 && (
+                  <button
+                    onClick={() => paginate(totalPages)}
+                    className={`pagination-btn ${
+                      currentPage === totalPages
+                        ? "active text-primary-red"
+                        : ""
+                    }`}
+                  >
+                    {totalPages}
+                  </button>
+                )}
 
-          {/* Next Button */}
-          <button
-            onClick={() => paginate(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="pagination-btn"
-          >
-            Next
-          </button>
-        </div>
+                <button
+                  onClick={() => paginate(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="pagination-btn"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </main>
     </div>
   );
 };
 
-export default Page;
+export default SearchPage;
