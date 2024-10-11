@@ -43,16 +43,13 @@ const NavBar = () => {
         </ul>
 
         <div className="flex items-center gap-4">
-          <CustomButton
-            title="Log in"
-            btnType="button"
-            containerStyles="text-primary-red rounded-2xl bg-white min-w-[130px] border-solid border-[1px] border-primary-red"
-          />
-          <CustomButton
-            title="Sign Up"
-            btnType="button"
-            containerStyles="text-white rounded-2xl bg-primary-red min-w-[130px]"
-          />
+          <Link href="/login">
+            <CustomButton
+              title="Log in/Sign up"
+              btnType="button"
+              containerStyles="text-black hover:text-primary-red transition ease duration-300 bg-white min-w-[130px] login-btn"
+            />
+          </Link>
         </div>
       </nav>
     </header>
