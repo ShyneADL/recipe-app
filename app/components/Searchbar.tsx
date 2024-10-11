@@ -1,11 +1,12 @@
 "use client";
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import SearchRecipe from "./SearchRecipe";
 import { RecipeProps } from "@/app/types";
+import { Loading } from "@/app/components";
 
-const SearchBar = () => {
+// Separate the content that uses client-side hooks into its own component
+const SearchBarContent = () => {
   const [recipes, setRecipes] = useState<RecipeProps[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
@@ -86,6 +87,23 @@ const SearchBar = () => {
         onClear={clearSearch}
       />
     </form>
+  );
+};
+
+// Main component with Suspense boundary
+const SearchBar = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="searchbar">
+          <div className="flex items-center justify-center w-full h-10">
+            <Loading />
+          </div>
+        </div>
+      }
+    >
+      <SearchBarContent />
+    </Suspense>
   );
 };
 
