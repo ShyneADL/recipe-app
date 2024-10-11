@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { RecipeProps } from "@/app/types";
-import { RecipeCard, SearchBar } from "@/app/components";
+import { Loading, RecipeCard, SearchBar } from "@/app/components";
 
 const SearchPage = () => {
   const [recipes, setRecipes] = useState<RecipeProps[]>([]);
@@ -76,103 +76,107 @@ const SearchPage = () => {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <div className="flex flex-col items-start gap-6 padding-x max-width">
-      <div className="w-full max-w-3xl mx-auto mb-6">
-        <SearchBar />
-      </div>
+    <Suspense fallback={<Loading />}>
+      <div className="flex flex-col items-start gap-6 padding-x max-width">
+        <div className="w-full max-w-3xl mx-auto mb-6">
+          <SearchBar />
+        </div>
 
-      <main className="w-full">
-        {isLoading ? (
-          <div className="flex justify-center items-center h-40">
-            <span className="loading-spinner">Loading...</span>
-          </div>
-        ) : (
-          <>
-            {searchQuery && (
-              <div className="mb-4">
-                <h2 className="text-xl font-semibold">
-                  Search results for: "{searchQuery}"
-                </h2>
-                <p className="text-gray-600">
-                  Found {displayedRecipes.length} recipes
-                </p>
-              </div>
-            )}
-
-            <ul className="recipe-container">
-              {currentRecipes.length > 0 ? (
-                currentRecipes.map((recipe) => (
-                  <RecipeCard key={recipe.id} recipe={recipe} />
-                ))
-              ) : (
-                <li className="text-center w-full py-8">
-                  No recipes found matching your search.
-                </li>
+        <main className="w-full">
+          {isLoading ? (
+            <div className="flex justify-center items-center h-40">
+              <Loading />
+            </div>
+          ) : (
+            <>
+              {searchQuery && (
+                <div className="mb-4">
+                  <h2 className="text-xl font-semibold">
+                    Search results for: "{searchQuery}"
+                  </h2>
+                  <p className="text-gray-600">
+                    Found {displayedRecipes.length} recipes
+                  </p>
+                </div>
               )}
-            </ul>
 
-            {displayedRecipes.length > pageSize && (
-              <div className="pagination">
-                <button
-                  onClick={() => paginate(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="pagination-btn"
-                >
-                  Previous
-                </button>
-
-                <button
-                  onClick={() => paginate(1)}
-                  className={`pagination-btn ${
-                    currentPage === 1 ? "active text-primary-red" : ""
-                  }`}
-                >
-                  1
-                </button>
-
-                {Array.from({ length: Math.min(totalPages - 2, 7) }).map(
-                  (_, index) => {
-                    const page = index + 2;
-                    return (
-                      <button
-                        key={page}
-                        onClick={() => paginate(page)}
-                        className={`pagination-btn ${
-                          currentPage === page ? "active text-primary-red" : ""
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    );
-                  }
+              <ul className="recipe-container">
+                {currentRecipes.length > 0 ? (
+                  currentRecipes.map((recipe) => (
+                    <RecipeCard key={recipe.id} recipe={recipe} />
+                  ))
+                ) : (
+                  <li className="text-center w-full py-8">
+                    No recipes found matching your search.
+                  </li>
                 )}
+              </ul>
 
-                {totalPages > 1 && (
+              {displayedRecipes.length > pageSize && (
+                <div className="pagination">
                   <button
-                    onClick={() => paginate(totalPages)}
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="pagination-btn"
+                  >
+                    Previous
+                  </button>
+
+                  <button
+                    onClick={() => paginate(1)}
                     className={`pagination-btn ${
-                      currentPage === totalPages
-                        ? "active text-primary-red"
-                        : ""
+                      currentPage === 1 ? "active text-primary-red" : ""
                     }`}
                   >
-                    {totalPages}
+                    1
                   </button>
-                )}
 
-                <button
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="pagination-btn"
-                >
-                  Next
-                </button>
-              </div>
-            )}
-          </>
-        )}
-      </main>
-    </div>
+                  {Array.from({ length: Math.min(totalPages - 2, 7) }).map(
+                    (_, index) => {
+                      const page = index + 2;
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => paginate(page)}
+                          className={`pagination-btn ${
+                            currentPage === page
+                              ? "active text-primary-red"
+                              : ""
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    }
+                  )}
+
+                  {totalPages > 1 && (
+                    <button
+                      onClick={() => paginate(totalPages)}
+                      className={`pagination-btn ${
+                        currentPage === totalPages
+                          ? "active text-primary-red"
+                          : ""
+                      }`}
+                    >
+                      {totalPages}
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="pagination-btn"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </main>
+      </div>
+    </Suspense>
   );
 };
 

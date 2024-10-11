@@ -4,5 +4,14 @@ import CustomButton from "./CustomButton";
 import Footer from "./Footer";
 import NavBar from "./Navbar";
 import SearchBar from "./Searchbar";
+import Loading from "./Loading";
 
-export { RecipeDetails, RecipeCard, CustomButton, Footer, NavBar, SearchBar };
+export {
+  Loading,
+  RecipeDetails,
+  RecipeCard,
+  CustomButton,
+  Footer,
+  NavBar,
+  SearchBar,
+};
