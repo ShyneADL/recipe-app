@@ -1,7 +1,6 @@
 // AuthComponent.tsx
 "use client";
 import { useState } from "react";
-import { authenticate } from "@/app/lib/actions";
 import "./login.modules.css";
 
 export default function AuthComponent() {
@@ -44,11 +43,7 @@ export default function AuthComponent() {
         >
           <div className="user_forms-login">
             <h2 className="forms_title">Login</h2>
-            <form
-              className="forms_form"
-              onSubmit={(e) => e.preventDefault()}
-              action={authenticate}
-            >
+            <form className="forms_form" onSubmit={(e) => e.preventDefault()}>
               <fieldset className="forms_fieldset">
                 <div className="forms_field">
                   <input
@@ -83,11 +78,7 @@ export default function AuthComponent() {
 
           <div className="user_forms-signup">
             <h2 className="forms_title">Sign Up</h2>
-            <form
-              className="forms_form"
-              onSubmit={(e) => e.preventDefault()}
-              action={authenticate}
-            >
+            <form className="forms_form" onSubmit={(e) => e.preventDefault()}>
               <fieldset className="forms_fieldset">
                 <div className="forms_field">
                   <input
