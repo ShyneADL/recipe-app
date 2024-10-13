@@ -62,6 +62,8 @@ export interface CategoryProps {
 export interface FilterProps {
   recipes: RecipeProps[];
   setFilteredRecipes: (filteredRecipes: RecipeProps[]) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export interface CustomButtonProps {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { useSearchParams, useRouter } from "next/navigation"; // Import the necessary hooks
+import { useSearchParams, useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
 import { FilterProps, CategoryProps } from "@/app/types";
+import { X, RefreshCw } from "lucide-react"; // Import RefreshCw icon
 
 interface NutrientRange {
   min: number;
@@ -22,6 +24,8 @@ export default function SidebarFilter({
   recipes,
   setFilteredRecipes,
   categories,
+  isOpen,
+  onClose,
 }: FilterProps & { categories: CategoryProps[] }) {
   const [calories, setCalories] = useState<NutrientRange>({
     min: 0,
@@ -33,10 +37,9 @@ export default function SidebarFilter({
   const [difficulty, setDifficulty] = useState<string>("All");
   const [category, setCategory] = useState<string>("all");
 
-  const searchParams = useSearchParams(); // Get the current URL search params
+  const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Synchronize category with the URL query param
   useEffect(() => {
     const urlCategory = searchParams.get("category") || "all";
     setCategory(urlCategory);
@@ -69,17 +72,16 @@ export default function SidebarFilter({
     setFilteredRecipes(filteredRecipes);
   }, [filteredRecipes, setFilteredRecipes]);
 
-  // Function to reset all filters to default
   const resetFilters = () => {
     setCalories({ min: 0, max: 1000 });
     setProtein({ min: 0, max: 100 });
     setCarbs({ min: 0, max: 100 });
     setFats({ min: 0, max: 100 });
-    setDifficulty("all");
+    setDifficulty("All");
     setCategory("all");
-    router.push(`/discover`); // Reset the URL to remove query params
+    router.push(`/discover`);
   };
-  // Debounce utility
+
   const debounce = (func: (...args: any) => void, timeout = 300) => {
     let timer: NodeJS.Timeout;
     return (...args: any) => {
@@ -88,7 +90,6 @@ export default function SidebarFilter({
     };
   };
 
-  // RangeSlider component
   const RangeSlider = ({
     label,
     value,
@@ -104,7 +105,6 @@ export default function SidebarFilter({
   }) => {
     const [internalValue, setInternalValue] = useState(value);
 
-    // Debounce state update to prevent constant re-renders
     const debouncedOnChange = useMemo(
       () => debounce((newValue: NutrientRange) => onChange(newValue), 300),
       [onChange]
@@ -118,13 +118,13 @@ export default function SidebarFilter({
             ? { ...internalValue, min: Math.min(numValue, internalValue.max) }
             : { ...internalValue, max: Math.max(numValue, internalValue.min) };
 
-        setInternalValue(updatedValue); // Update local input state immediately
-        debouncedOnChange(updatedValue); // Debounce the global state update
+        setInternalValue(updatedValue);
+        debouncedOnChange(updatedValue);
       }
     };
 
     return (
-      <div className="sidebar">
+      <div className="macros-filters">
         <Label className="mt-2">{label}</Label>
         <div className="flex items-center space-x-2">
           <Label htmlFor={`${label}-min`} className="w-8 text-xs">
@@ -159,8 +159,8 @@ export default function SidebarFilter({
           value={[internalValue.min, internalValue.max]}
           onValueChange={(newValue) => {
             const updatedValue = { min: newValue[0], max: newValue[1] };
-            setInternalValue(updatedValue); // Update slider state locally
-            debouncedOnChange(updatedValue); // Debounce global state update
+            setInternalValue(updatedValue);
+            debouncedOnChange(updatedValue);
           }}
           className="mt-2"
         />
@@ -169,97 +169,113 @@ export default function SidebarFilter({
   };
 
   return (
-    <Card className="w-[400px]">
-      <CardContent className="space-y-6 flex flex-col items-start gap-4">
-        <div className="space-y-2">
-          <Label>Recipe Categories</Label>
-          {/* Category radio group */}
-          <form className="category-filter">
-            <div className="category-item ">
-              <input
-                name="category"
-                type="radio"
-                value="all"
-                id="all"
-                checked={category === "all"}
-                onChange={(e) => {
-                  setCategory(e.target.value);
-                  router.push(`/discover`);
-                }} // Update the state and URL when the value changes
-              />
-              <label className="category-text" htmlFor="all">
-                All
-              </label>
-            </div>
-
-            {categories.map((cat) => (
-              <div
-                key={cat.id}
-                className="category-item flex items-center space-x-2"
+    <div className={`sidebar-wrapper ${isOpen ? "open" : ""}`}>
+      <Card className="md:w-[400px] w-full h-full">
+        <CardContent className="space-y-6 flex flex-col items-start gap-4">
+          <div className="flex justify-between items-center w-full">
+            <h2 className="text-xl font-bold">Filters</h2>
+            <div className="flex items-center space-x-2">
+              <Button
+                onClick={resetFilters}
+                variant="outline"
+                size="sm"
+                className="flex items-center"
               >
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Reset
+              </Button>
+              <button onClick={onClose} className="md:hidden">
+                <X size={24} />
+              </button>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label>Recipe Categories</Label>
+            <form className="category-filter">
+              <div className="category-item ">
                 <input
                   name="category"
                   type="radio"
-                  value={cat.category}
-                  id={cat.category}
-                  checked={category === cat.category} // Checks if the current category matches the selected one
+                  value="all"
+                  id="all"
+                  checked={category === "all"}
                   onChange={(e) => {
                     setCategory(e.target.value);
-                    router.push(`/discover?category=${e.target.value}`); // Update the URL when the value changes
+                    router.push(`/discover`);
                   }}
                 />
-                <label className="category-text" htmlFor={cat.category}>
-                  {cat.category}
+                <label className="category-text" htmlFor="all">
+                  All
                 </label>
               </div>
-            ))}
-          </form>
-        </div>
-        {/* Min-Max Range Sliders */}
-        <RangeSlider
-          label="Calories"
-          value={calories}
-          onChange={setCalories}
-          max={1000}
-          step={100}
-        />
-        <RangeSlider
-          label="Protein (g)"
-          value={protein}
-          onChange={setProtein}
-          max={100}
-          step={20}
-        />
 
-        <RangeSlider
-          label="Carbs (g)"
-          value={carbs}
-          onChange={setCarbs}
-          max={100}
-          step={20}
-        />
-        <RangeSlider
-          label="Fats (g)"
-          value={fats}
-          onChange={setFats}
-          max={100}
-          step={20}
-        />
-        <div className="space-y-2">
-          <Label htmlFor="difficulty">Difficulty Level</Label>
-          <Select value={difficulty} onValueChange={setDifficulty}>
-            <SelectTrigger id="difficulty">
-              <SelectValue placeholder="Select difficulty" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="All">All</SelectItem>
-              <SelectItem value="Easy">Easy</SelectItem>
-              <SelectItem value="Medium">Medium</SelectItem>
-              <SelectItem value="Difficult">Difficult</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </CardContent>
-    </Card>
+              {categories.map((cat) => (
+                <div
+                  key={cat.id}
+                  className="category-item flex items-center space-x-2"
+                >
+                  <input
+                    name="category"
+                    type="radio"
+                    value={cat.category}
+                    id={cat.category}
+                    checked={category === cat.category}
+                    onChange={(e) => {
+                      setCategory(e.target.value);
+                      router.push(`/discover?category=${e.target.value}`);
+                    }}
+                  />
+                  <label className="category-text" htmlFor={cat.category}>
+                    {cat.category}
+                  </label>
+                </div>
+              ))}
+            </form>
+          </div>
+          <RangeSlider
+            label="Calories"
+            value={calories}
+            onChange={setCalories}
+            max={1000}
+            step={100}
+          />
+          <RangeSlider
+            label="Protein (g)"
+            value={protein}
+            onChange={setProtein}
+            max={100}
+            step={20}
+          />
+          <RangeSlider
+            label="Carbs (g)"
+            value={carbs}
+            onChange={setCarbs}
+            max={100}
+            step={20}
+          />
+          <RangeSlider
+            label="Fats (g)"
+            value={fats}
+            onChange={setFats}
+            max={100}
+            step={20}
+          />
+          <div className="space-y-2">
+            <Label htmlFor="difficulty">Difficulty Level</Label>
+            <Select value={difficulty} onValueChange={setDifficulty}>
+              <SelectTrigger id="difficulty">
+                <SelectValue placeholder="Select difficulty" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All</SelectItem>
+                <SelectItem value="Easy">Easy</SelectItem>
+                <SelectItem value="Medium">Medium</SelectItem>
+                <SelectItem value="Difficult">Difficult</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

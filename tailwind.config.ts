@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import fluid, { extract } from "fluid-tailwind";
+
 module.exports = {
   darkMode: ["class"],
   content: ["./app/**/*.{js,ts,jsx,tsx,mdx}"],

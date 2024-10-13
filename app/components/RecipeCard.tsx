@@ -88,7 +88,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
         <span className="text-grey">{calculateTotalTime()} min</span>
       </p>
 
-      <div className="flex items-center justify-between w-full">
+      <div className="flex md:flex-row flex-col md:items-center items-start justify-between w-full">
         <div className="flex items-center justify-between w-[175px]">
           <p className="recipe-text">Difficulty:</p>
           <div className="flex items-center justify-start gap-[6px] w-[100px]">

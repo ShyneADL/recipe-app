@@ -15,7 +15,7 @@ const Community = () => {
         containerStyles="text-white rounded-2xl bg-primary-red  min-w-[130px]"
       />
       <div className="flex items-center gap-8 mt-6">
-        <div className="p-5 bg-lightGrey rounded-lg">
+        <div className="lg:flex hidden p-5 bg-lightGrey rounded-lg">
           <Image
             src="/women-kitchen.jpg"
             alt="women cooking"
@@ -24,7 +24,7 @@ const Community = () => {
             className="aspect-video object-fit rounded-lg w-[256px] h-[171px]"
           />
         </div>
-        <div className="p-5 bg-lightGrey rounded-lg">
+        <div className="lg:flex hidden p-5 bg-lightGrey rounded-lg">
           <Image
             src="/kitchen2.jpg"
             alt="man and woman cooking"

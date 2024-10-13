@@ -4,19 +4,19 @@ import CustomButton from "@/app/components/CustomButton";
 const Newsletter = () => {
   return (
     <div className="bg-primary-red padding-x padding-y w-full">
-      <div className="flex items-center justify-between gap-[220px] bg-white p-20 max-width">
-        <div className="flex flex-col items-start gap-6 w-[600px]">
-          <h3 className="text-primary-red text-[1.6rem] font-bold w-fit">
+      <div className="flex md:flex-row flex-col items-center justify-between lg:gap-[220px] gap-[40px] bg-white lg:p-20 md:p-8 p-4 max-width">
+        <div className="flex flex-col md:items-start items-center md:gap-6 gap-4 md:w-[600px] w-full">
+          <h3 className="big-text md:text-left text-center md:w-fit w-full">
             Get inspired by KetoHub's superstar recipes.
           </h3>
-          <p className="text-black font-bold text-[1rem] leading-[22px] ~w-{250px]/[600px]">
+          <p className="text-black md:text-left text-center font-bold text-[1rem] leading-[22px] md:w-[250px] w-full">
             Join the KetoHub community and get exclusive keto recipes from
             around the globe delivered straight to your inbox! Stay inspired
             with low-carb meal ideas, cooking tips, and more. Subscribe now to
             fuel your keto journey!
           </p>
         </div>
-        <div className="flex flex-col items-start gap-3 max-w-[400px]">
+        <div className="flex flex-col items-start gap-3 lg:max-w-[400px] max-w-[320px]">
           <label className="text-black text-[1.4rem] font-semibold">
             Subscribe to our Newsletter
           </label>

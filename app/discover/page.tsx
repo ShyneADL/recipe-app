@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import SidebarFilter from "@/app/components/SidebarFilter";
 import { RecipeProps, CategoryProps } from "@/app/types";
 import { Loading, RecipeCard } from "@/app/components";
+import Image from "next/image";
 
 // Separate the content that uses useSearchParams into a client component
 const RecipeContent = () => {
@@ -12,11 +13,21 @@ const RecipeContent = () => {
   const [categories, setCategories] = useState<CategoryProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const pageSize = 12;
 
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
 
+  const toggleFilters = () => {
+    setIsOpen(!isOpen);
+  };
+  const closeFilters = () => {
+    setIsOpen(false);
+  };
+  useEffect(() => {
+    console.log(isOpen);
+  });
   // Reset pagination when search query or category changes
   useEffect(() => {
     setCurrentPage(1);
@@ -89,14 +100,23 @@ const RecipeContent = () => {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <div className="flex w-full gap-6">
-      <div className="sidebar-wrapper">
+    <div className="relative flex w-full gap-6">
+      <div
+        onClick={toggleFilters}
+        className="fixed bottom-2 z-2 left-[50%] translate-x-[-50%] rounded-full p-2 bg-black md:hidden flex items-center gap-1"
+      >
+        <p className="text-white">Filter</p>
+        <Image src="/filter.svg" alt="filter icon" width={24} height={24} />
+      </div>
+
         <SidebarFilter
           recipes={recipes}
           setFilteredRecipes={setFilteredRecipes}
           categories={categories}
+          onClose={closeFilters}
+          isOpen={isOpen}
         />
-      </div>
+
 
       <main className="w-full">
         {isLoading ? (
@@ -136,7 +156,7 @@ const RecipeContent = () => {
                   1
                 </button>
 
-                {Array.from({ length: Math.min(totalPages - 2, 7) }).map(
+                {Array.from({ length: Math.min(totalPages - 2, 3) }).map(
                   (_, index) => {
                     const page = index + 2;
                     return (

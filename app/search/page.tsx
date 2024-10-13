@@ -131,7 +131,7 @@ const SearchContent = () => {
                   1
                 </button>
 
-                {Array.from({ length: Math.min(totalPages - 2, 7) }).map(
+                {Array.from({ length: Math.min(totalPages - 2, 3) }).map(
                   (_, index) => {
                     const page = index + 2;
                     return (
