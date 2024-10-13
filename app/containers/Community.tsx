@@ -6,7 +6,7 @@ const Community = () => {
   return (
     <div className="flex flex-col items-center justify-center gap-6 padding-x padding-y max-width">
       <h2 className="big-text">Meet our Community</h2>
-      <p className="font-semibold text-[1.4rem] text-grey ">
+      <p className="font-semibold text-center text-[1.4rem] text-grey ">
         Comment, Share and Discover with fellow food enthusiasts
       </p>
       <CustomButton
@@ -19,18 +19,18 @@ const Community = () => {
           <Image
             src="/women-kitchen.jpg"
             alt="women cooking"
-            width={200}
-            height={112.5}
-            className="aspect-video object-fit rounded-lg w-[300px]"
+            width={256}
+            height={171}
+            className="aspect-video object-fit rounded-lg w-[256px] h-[171px]"
           />
         </div>
         <div className="p-5 bg-lightGrey rounded-lg">
           <Image
             src="/kitchen2.jpg"
             alt="man and woman cooking"
-            width={200}
-            height={112.5}
-            className="aspect-video object-fit rounded-lg w-[300px]"
+            width={256}
+            height={171}
+            className="aspect-video object-fit rounded-lg w-[256px] h-[171px]"
           />
         </div>
       </div>

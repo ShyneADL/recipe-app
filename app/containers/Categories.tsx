@@ -64,7 +64,7 @@ const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
       <div className="categories-container">
         <h1 className="big-text">Explore recipes by categories</h1>
         {/* The category section */}
-        <div className="relative flex items-center gap-5 select-none max-w-[1320px]">
+        <div className="relative flex items-center gap-5 select-none lg:max-w-[1320px] lg:w-[auto] w-full">
           {/* Left icon */}
           <button
             onClick={scrollLeft}
@@ -88,10 +88,10 @@ const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
               categories.map((category: CategoryProps) => (
                 <div
                   key={category.id}
-                  className="p-3 flex flex-col flex-shrink-0 items-center gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer w-[200px]"
+                  className="p-3 flex flex-col flex-shrink-0 items-center gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer lg:w-[200px] w-[120px]"
                   onClick={() => handleCategoryClick(category.category)} // Handle click event
                 >
-                  <div className="rounded-full w-[200px]">
+                  <div className="rounded-full lg:w-[200px] w-[120px]">
                     <Image
                       src={category.thumbnail}
                       alt={category.category}

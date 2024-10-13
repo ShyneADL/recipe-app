@@ -50,7 +50,7 @@
 }
 
 .big-text {
-  @apply text-4xl font-extrabold text-primary-red;
+  @apply lg:text-4xl text-2xl font-extrabold text-primary-red;
 }
 
 img {
@@ -185,13 +185,13 @@ input[type="number"] {
 }
 /* END: Categories section */
 
-/* START: Trending recipes section */
+/* START: Recipe Card styles */
+
 .recipe-container {
-  @apply flex flex-wrap items-start gap-[2px] w-full;
-  row-gap: 60px;
+  @apply flex flex-wrap items-start gap-[2px] md:gap-y-[60px] gap-y-[30px] md:justify-normal justify-between w-full;
 }
 .recipe-item {
-  @apply flex flex-col items-start gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer p-3 w-[33%];
+  @apply flex flex-col items-start gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer p-3 md:w-[33%] w-[49.5%];
 }
 .recipe-name {
   @apply text-[1.1rem] text-black text-left font-semibold w-full;
