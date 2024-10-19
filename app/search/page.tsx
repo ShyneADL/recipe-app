@@ -3,10 +3,11 @@ import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { RecipeProps } from "@/app/types";
 import { Loading, RecipeCard, SearchBar } from "@/app/components";
+import { useRecipeStore } from "../store/recipeStore";
 
 // Separate the content that uses useSearchParams into a client component
 const SearchContent = () => {
-  const [recipes, setRecipes] = useState<RecipeProps[]>([]);
+  const { recipes, initializeStore } = useRecipeStore();
   const [displayedRecipes, setDisplayedRecipes] = useState<RecipeProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,34 +23,8 @@ const SearchContent = () => {
 
   // Fetch recipes once on component mount
   useEffect(() => {
-    const fetchRecipes = async () => {
-      setIsLoading(true);
-      try {
-        const url = "https://keto-diet.p.rapidapi.com/";
-        const options = {
-          method: "GET",
-          headers: {
-            "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
-            "x-rapidapi-host": "keto-diet.p.rapidapi.com",
-          },
-        };
-
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          throw new Error("Failed to fetch recipes");
-        }
-        const result = await response.json();
-        setRecipes(result);
-        setDisplayedRecipes(result); // Initially display all recipes
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchRecipes();
-  }, []);
+    initializeStore();
+  }, [initializeStore]);
 
   // Filter recipes when search query changes
   useEffect(() => {

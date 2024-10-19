@@ -3,16 +3,18 @@ import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation"; // Correct useRouter import
 import { CategoryProps } from "@/app/types";
+import { useRecipeStore } from "../store/recipeStore";
 
-interface CategorySectionProps {
-  categories: CategoryProps[];
-}
-
-const Categories: React.FC<CategorySectionProps> = ({ categories }) => {
+const Categories = () => {
+  const { categories, initializeStore } = useRecipeStore();
   const [showLeftIcon, setShowLeftIcon] = useState(false);
   const [showRightIcon, setShowRightIcon] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const router = useRouter(); // Initialize the router
+
+  useEffect(() => {
+    initializeStore();
+  }, [initializeStore]);
 
   const scrollLeft = () => {
     if (scrollRef.current) {

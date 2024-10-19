@@ -1,30 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 
-import { RecipeProps } from "@/app/types";
 import { RecipeCard } from "@/app/components";
+import { useRecipeStore } from "../store/recipeStore";
+import { RecipeProps } from "../types";
 
-interface FeaturedMacrosSectionProps {
-  highProteinRecipes: RecipeProps[];
-}
+const FeaturedMacrosSection = () => {
+  const recipes = useRecipeStore((state) => state.recipes);
 
-const FeaturedMacrosSection: React.FC<FeaturedMacrosSectionProps> = ({
-  highProteinRecipes,
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedRecipe, setSelectedRecipe] = useState<RecipeProps | null>(
-    null
-  );
-
-  const openModal = (recipe: RecipeProps) => {
-    setSelectedRecipe(recipe);
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-    setSelectedRecipe(null);
-  };
+  const highProteinRecipes = recipes
+    .filter(
+      (recipe: RecipeProps) =>
+        recipe.protein_in_grams > 20 && recipe.protein_in_grams < 50
+    )
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);
 
   return (
     <div className="flex flex-col items-center justify-center gap-10 padding-x padding-y max-width">

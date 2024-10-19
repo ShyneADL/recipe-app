@@ -4,10 +4,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import SearchRecipe from "./SearchRecipe";
 import { RecipeProps } from "@/app/types";
 import { Loading } from "@/app/components";
+import { useRecipeStore } from "../store/recipeStore";
 
 // Separate the content that uses client-side hooks into its own component
 const SearchBarContent = () => {
-  const [recipes, setRecipes] = useState<RecipeProps[]>([]);
+  const { recipes, initializeStore } = useRecipeStore();
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -21,30 +22,8 @@ const SearchBarContent = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      const url = "https://keto-diet.p.rapidapi.com/";
-      const options = {
-        method: "GET",
-        headers: {
-          "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
-          "x-rapidapi-host": "keto-diet.p.rapidapi.com",
-        },
-      };
-
-      try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          throw new Error("Failed to fetch recipes");
-        }
-        const result = await response.json();
-        setRecipes(result);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchRecipes();
-  }, []);
+    initializeStore();
+  }, [initializeStore]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

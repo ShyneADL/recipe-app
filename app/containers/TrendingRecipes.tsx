@@ -1,14 +1,16 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { RecipeProps } from "@/app/types";
 import { RecipeCard } from "@/app/components";
+import { useRecipeStore } from "../store/recipeStore";
 
-interface TrendingRecipesProps {
-  recipes: RecipeProps[];
-}
+const TrendingRecipes = () => {
+  const recipes = useRecipeStore((state) => state.recipes);
 
-const TrendingRecipes: React.FC<TrendingRecipesProps> = ({ recipes }) => {
+  const slicedRecipes = [...recipes]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 6);
+
   return (
     <div className="flex flex-col items-center justify-center gap-10 padding-y padding-x max-width">
       <div className="flex gap-1">
@@ -16,9 +18,9 @@ const TrendingRecipes: React.FC<TrendingRecipesProps> = ({ recipes }) => {
         <Image src="/trending.svg" alt="Trending icon" width={50} height={50} />
       </div>
       <div className="recipe-container">
-        {recipes.map((recipe) => {
-          return <RecipeCard key={recipe.id} recipe={recipe} />;
-        })}
+        {slicedRecipes.map((recipe) => (
+          <RecipeCard key={recipe.id} recipe={recipe} />
+        ))}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
+import { StoreProvider } from "@/app/store/storeProvider";
 
 import { Footer, NavBar } from "@/app/components";
 
@@ -18,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="relative">
         <NavBar />
-        {children}
+        <StoreProvider>{children}</StoreProvider>
         <Footer />
         <Analytics />
       </body>

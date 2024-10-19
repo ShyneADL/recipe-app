@@ -109,14 +109,13 @@ const RecipeContent = () => {
         <Image src="/filter.svg" alt="filter icon" width={24} height={24} />
       </div>
 
-        <SidebarFilter
-          recipes={recipes}
-          setFilteredRecipes={setFilteredRecipes}
-          categories={categories}
-          onClose={closeFilters}
-          isOpen={isOpen}
-        />
-
+      <SidebarFilter
+        recipes={recipes}
+        setFilteredRecipes={setFilteredRecipes}
+        categories={categories}
+        onClose={closeFilters}
+        isOpen={isOpen}
+      />
 
       <main className="w-full">
         {isLoading ? (
