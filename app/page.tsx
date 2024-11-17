@@ -10,6 +10,7 @@ import {
 
 export default function Home() {
   return (
+    // Render all sections
     <main className="overflow-hidden">
       <Hero />
       <Categories />
