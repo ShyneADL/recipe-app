@@ -39,7 +39,7 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
-          className="relative z-10 details-wrapper"
+          className="relative z-50 details-wrapper"
           onClose={closeModal}
         >
           <TransitionChild

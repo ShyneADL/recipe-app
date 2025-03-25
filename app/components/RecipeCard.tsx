@@ -74,8 +74,8 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
         src={recipe.image}
         alt={recipe.recipe}
         width={200}
-        height={112.5}
-        className="recipe-image"
+        height={200}
+        className="recipe-image w-full h-auto object-cover"
       />
       <h3 className="recipe-name">{recipe.recipe}</h3>
 

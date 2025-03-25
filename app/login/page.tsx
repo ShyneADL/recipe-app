@@ -1,14 +1,97 @@
 // AuthComponent.tsx
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import "./login.modules.css";
+import { createAccount, login, googleAuth } from "@/lib/appwrite";
+import Loading from "../loading";
 
 export default function AuthComponent() {
   const [isLoginActive, setIsLoginActive] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    name: "",
+  });
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    try {
+      const { session, user } = await login(formData.email, formData.password);
+      if (session && user) {
+        router.push("/");
+        router.refresh();
+      } else {
+        throw new Error("Failed to login");
+      }
+    } catch (error: any) {
+      setError(error.message || "Failed to login");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    try {
+      const account = await createAccount(
+        formData.email,
+        formData.password,
+        formData.name
+      );
+      if (account) {
+        const { session, user } = await login(
+          formData.email,
+          formData.password
+        );
+        if (session && user) {
+          router.push("/");
+          router.refresh();
+        } else {
+          throw new Error("Failed to login after signup");
+        }
+      }
+    } catch (error: any) {
+      setError(error.message || "Failed to create account");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      await googleAuth();
+      // The redirect will happen automatically
+    } catch (error: any) {
+      setError(error.message || "Failed to login with Google");
+      setIsLoading(false);
+    }
+  };
 
   const toggleForm = () => {
     setIsLoginActive(!isLoginActive);
+    setError("");
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <section className="user">
@@ -43,23 +126,30 @@ export default function AuthComponent() {
         >
           <div className="user_forms-login">
             <h2 className="forms_title">Login</h2>
-            <form className="forms_form" onSubmit={(e) => e.preventDefault()}>
+            {error && <div className="error-message">{error}</div>}
+            <form className="forms_form" onSubmit={handleLogin}>
               <fieldset className="forms_fieldset">
                 <div className="forms_field">
                   <input
                     type="email"
+                    name="email"
                     placeholder="Email"
                     className="forms_field-input"
                     required
                     autoFocus
+                    value={formData.email}
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="forms_field">
                   <input
                     type="password"
+                    name="password"
                     placeholder="Password"
                     className="forms_field-input"
                     required
+                    value={formData.password}
+                    onChange={handleInputChange}
                   />
                 </div>
               </fieldset>
@@ -73,35 +163,55 @@ export default function AuthComponent() {
                   className="forms_buttons-action"
                 />
               </div>
+              <div className="forms_social">
+                <button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  className="forms_buttons-google"
+                >
+                  <img src="/google.svg" alt="Google" className="google-icon" />
+                  Sign in with Google
+                </button>
+              </div>
             </form>
           </div>
 
           <div className="user_forms-signup">
             <h2 className="forms_title">Sign Up</h2>
-            <form className="forms_form" onSubmit={(e) => e.preventDefault()}>
+            {error && <div className="error-message">{error}</div>}
+            <form className="forms_form" onSubmit={handleSignup}>
               <fieldset className="forms_fieldset">
                 <div className="forms_field">
                   <input
                     type="text"
+                    name="name"
                     placeholder="Full Name"
                     className="forms_field-input"
                     required
+                    value={formData.name}
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="forms_field">
                   <input
                     type="email"
+                    name="email"
                     placeholder="Email"
                     className="forms_field-input"
                     required
+                    value={formData.email}
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="forms_field">
                   <input
                     type="password"
+                    name="password"
                     placeholder="Password"
                     className="forms_field-input"
                     required
+                    value={formData.password}
+                    onChange={handleInputChange}
                   />
                 </div>
               </fieldset>
@@ -111,6 +221,16 @@ export default function AuthComponent() {
                   value="Sign up"
                   className="forms_buttons-action"
                 />
+              </div>
+              <div className="forms_social">
+                <button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  className="forms_buttons-google"
+                >
+                  <img src="/google.svg" alt="Google" className="google-icon" />
+                  Sign up with Google
+                </button>
               </div>
             </form>
           </div>

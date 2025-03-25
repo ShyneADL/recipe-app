@@ -65,12 +65,11 @@ const Categories = () => {
     <div className="mt-12 padding-x padding-y max-width" id="discover">
       <div className="categories-container">
         <h1 className="big-text">Explore recipes by categories</h1>
-        {/* The category section */}
-        <div className="relative flex items-center gap-5 select-none lg:max-w-[1320px] lg:w-[auto] w-full">
+        <div className="flex items-center justify-center gap-4 w-full max-w-[1320px] mx-auto">
           {/* Left icon */}
           <button
             onClick={scrollLeft}
-            className={`absolute -left-40 top-1/2 -translate-y-1/2 z-10 p-4 bg-white/80 hover:bg-gray-300 rounded-full transition-opacity ${
+            className={`flex-shrink-0 p-2 bg-white/80 hover:bg-gray-300 rounded-full transition-opacity ${
               showLeftIcon ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
             aria-hidden={!showLeftIcon}
@@ -78,10 +77,13 @@ const Categories = () => {
             <Image
               src="/icon-left.svg"
               alt="previous icon"
-              width={100}
-              height={100}
+              width={40}
+              height={40}
+              className="w-12 h-12"
             />
           </button>
+
+          {/* Categories scroll container */}
           <div
             ref={scrollRef}
             className="flex items-center gap-5 overflow-x-scroll scrollbar max-w-[1000px]"
@@ -111,10 +113,11 @@ const Categories = () => {
               <p>Loading categories...</p>
             )}
           </div>
+
           {/* Right icon */}
           <button
             onClick={scrollRight}
-            className={`absolute -right-40 top-1/2 -translate-y-1/2 z-10 p-4 bg-white/80 hover:bg-gray-300 rounded-full transition-opacity ${
+            className={`flex-shrink-0 p-2 bg-white/80 hover:bg-gray-300 rounded-full transition-opacity ${
               showRightIcon ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
             aria-hidden={!showRightIcon}
@@ -122,8 +125,9 @@ const Categories = () => {
             <Image
               src="/icon-right.svg"
               alt="next icon"
-              width={100}
-              height={100}
+              width={40}
+              height={40}
+              className="w-12 h-12"
             />
           </button>
         </div>
