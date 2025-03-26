@@ -2,10 +2,8 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { RecipeProps } from "@/app/types";
 import { Loading, RecipeCard } from "@/app/components";
-import { useRecipeStore } from "../store/recipeStore";
 
 const Page = () => {
-  const allRecipes = useRecipeStore((state) => state.recipes);
   const [wishlistItems, setWishlistItems] = useState<RecipeProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,6 +22,19 @@ const Page = () => {
           setIsLoading(false);
           return;
         }
+
+        const response = await fetch("https://keto-diet.p.rapidapi.com/", {
+          headers: {
+            "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
+            "x-rapidapi-host": "keto-diet.p.rapidapi.com",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch recipes");
+        }
+
+        const allRecipes = await response.json();
 
         // Filter recipes to only include those in the wishlist
         const wishlisted = allRecipes.filter((recipe: RecipeProps) =>

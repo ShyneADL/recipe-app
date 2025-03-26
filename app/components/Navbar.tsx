@@ -52,7 +52,7 @@ const NavBar = () => {
   };
 
   return (
-    <header className="w-full fixed top-0 z-50 bg-white">
+    <header className="w-full z-50 bg-white">
       <nav className="flex justify-between items-center sm:px-16 px-6 py-4 bg-transparent max-w-[1440px] w-full mx-auto">
         <Link href="/" className="flex justify-center items-center">
           <Image

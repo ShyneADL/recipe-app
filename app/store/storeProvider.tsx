@@ -1,29 +1,41 @@
 // StoreProvider.tsx
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRecipeStore } from "./recipeStore";
-import { Loading } from "../components";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useRecipeStore, RecipeStore } from "./recipeStore";
+
+const StoreContext = createContext<RecipeStore | null>(null);
+
+export function useStore() {
+  const store = useContext(StoreContext);
+  if (!store) {
+    throw new Error("useStore must be used within a StoreProvider");
+  }
+  return store;
+}
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
-  const [isInitialized, setIsInitialized] = useState(false);
-  const initializeStore = useRecipeStore((state) => state.initializeStore);
+  const [store, setStore] = useState<RecipeStore | null>(null);
+  const recipeStore = useRecipeStore();
 
   useEffect(() => {
-    const init = async () => {
-      await initializeStore();
-      setIsInitialized(true);
+    const initStore = async () => {
+      await recipeStore.initializeStore();
+      setStore(recipeStore);
     };
-    init();
-  }, []);
 
-  if (!isInitialized) {
+    initStore();
+  }, [recipeStore]);
+
+  if (!store) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loading />
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
-  return <>{children}</>;
+  return (
+    <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
+  );
 }

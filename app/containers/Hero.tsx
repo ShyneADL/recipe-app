@@ -22,7 +22,7 @@ const Hero = () => {
           {/* Images */}
           <div className="lg:flex hidden absolute ~bottom-[40px]/[80px] xl:left-[-75px] md:left-[-40px] z-[-1]">
             <Image
-              src="/ingredients.jpg"
+              src="/ingredients.webp"
               alt="ingredients illustration"
               width={200}
               height={200}

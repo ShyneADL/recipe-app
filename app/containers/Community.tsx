@@ -17,7 +17,7 @@ const Community = () => {
       <div className="flex items-center gap-8 mt-6">
         <div className="lg:flex hidden p-5 bg-lightGrey rounded-lg">
           <Image
-            src="/women-kitchen.jpg"
+            src="/women-kitchen.webp"
             alt="women cooking"
             width={256}
             height={171}
@@ -26,7 +26,7 @@ const Community = () => {
         </div>
         <div className="lg:flex hidden p-5 bg-lightGrey rounded-lg">
           <Image
-            src="/kitchen2.jpg"
+            src="/kitchen2.webp"
             alt="man and woman cooking"
             width={256}
             height={171}

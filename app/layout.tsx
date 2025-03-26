@@ -1,13 +1,16 @@
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
-import { StoreProvider } from "@/app/store/storeProvider";
+import { StoreProvider } from "./store/storeProvider";
+import NavBar from "./components/Navbar";
+import Footer from "./components/Footer";
 
-import { Footer, NavBar } from "@/app/components";
+const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "KetoHub",
-  description:
-    "Discover delicious keto recipes from around the world. Easily search, save, and share your favorite meals.",
+export const metadata: Metadata = {
+  title: "Recipe App",
+  description: "Discover and share your favorite recipes",
 };
 
 export default function RootLayout({
@@ -17,13 +20,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="relative">
-        <NavBar />
-        <main className="pt-[72px]">
-          <StoreProvider>{children}</StoreProvider>
-        </main>
-        <Footer />
-        <Analytics />
+      <body className={inter.className}>
+        <StoreProvider>
+          <NavBar />
+          {children}
+          <Footer />
+          <Analytics />
+        </StoreProvider>
       </body>
     </html>
   );

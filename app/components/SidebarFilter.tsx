@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -13,12 +13,121 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { FilterProps, CategoryProps } from "@/app/types";
-import { X, RefreshCw } from "lucide-react"; // Import RefreshCw icon
+import { X, RefreshCw } from "lucide-react";
 
 interface NutrientRange {
   min: number;
   max: number;
 }
+
+// Memoize the RangeSlider to prevent unnecessary re-renders
+const RangeSlider = React.memo(
+  ({
+    label,
+    value,
+    onChange,
+    max,
+    step,
+  }: {
+    label: string;
+    value: NutrientRange;
+    onChange: (value: NutrientRange) => void;
+    max: number;
+    step: number;
+  }) => {
+    const [internalValue, setInternalValue] = useState(value);
+    const [minInputValue, setMinInputValue] = useState(value.min.toString());
+
+    useEffect(() => {
+      setInternalValue(value);
+      setMinInputValue(value.min.toString());
+    }, [value]);
+
+    const handleInputChange = useCallback(
+      (type: "min" | "max", inputValue: string) => {
+        if (type === "min") {
+          // Remove leading 0 when user starts typing
+          const processedValue =
+            inputValue === "0" ? "" : inputValue.replace(/^0+/, "");
+          setMinInputValue(processedValue);
+
+          if (processedValue === "") {
+            // Don't update the actual filter until we have a valid number
+            return;
+          }
+
+          const numValue = Number(processedValue);
+          if (!isNaN(numValue)) {
+            const updatedValue = {
+              ...internalValue,
+              min: Math.min(numValue, internalValue.max),
+            };
+            setInternalValue(updatedValue);
+            onChange(updatedValue);
+          }
+        } else {
+          const numValue = Number(inputValue);
+          if (!isNaN(numValue)) {
+            const updatedValue = {
+              ...internalValue,
+              max: Math.max(numValue, internalValue.min),
+            };
+            setInternalValue(updatedValue);
+            onChange(updatedValue);
+          }
+        }
+      },
+      [internalValue, onChange]
+    );
+    return (
+      <div className="macros-filters">
+        <Label className="mt-2 font-semibold">{label}</Label>
+        <div className="flex items-center space-x-2">
+          <Label htmlFor={`${label}-min`} className="w-8 text-xs">
+            Min
+          </Label>
+          <Input
+            id={`${label}-min`}
+            type="number"
+            min={0}
+            max={internalValue.max}
+            value={minInputValue}
+            onChange={(e) => handleInputChange("min", e.target.value)}
+            className="w-20"
+            placeholder="0"
+          />
+          <Label htmlFor={`${label}-max`} className="w-8 text-xs">
+            Max
+          </Label>
+          <Input
+            id={`${label}-max`}
+            type="number"
+            min={internalValue.min}
+            max={max}
+            value={internalValue.max}
+            onChange={(e) => handleInputChange("max", e.target.value)}
+            className="w-20"
+          />
+        </div>
+        <Slider
+          min={0}
+          max={max}
+          step={step}
+          value={[internalValue.min, internalValue.max]}
+          onValueChange={(newValue) => {
+            const updatedValue = { min: newValue[0], max: newValue[1] };
+            setInternalValue(updatedValue);
+            setMinInputValue(updatedValue.min.toString());
+            onChange(updatedValue);
+          }}
+          className="mt-2"
+        />
+      </div>
+    );
+  }
+);
+
+RangeSlider.displayName = "RangeSlider";
 
 export default function SidebarFilter({
   recipes,
@@ -45,8 +154,21 @@ export default function SidebarFilter({
     setCategory(urlCategory);
   }, [searchParams]);
 
-  const filteredRecipes = useMemo(() => {
-    return recipes.filter((recipe) => {
+  // Stable debounce function
+  const debounce = useCallback(
+    (func: (...args: any) => void, timeout = 1000) => {
+      let timer: NodeJS.Timeout;
+      return (...args: any) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => func(...args), timeout);
+      };
+    },
+    []
+  );
+
+  // Stable filter function
+  const filterRecipes = useCallback(() => {
+    const filtered = recipes.filter((recipe) => {
       const matchesCategory =
         category === "all" || recipe.category.category === category;
 
@@ -66,13 +188,29 @@ export default function SidebarFilter({
         matchesCategory
       );
     });
-  }, [recipes, calories, protein, carbs, fats, difficulty, category]);
+    setFilteredRecipes(filtered);
+  }, [
+    recipes,
+    calories,
+    protein,
+    carbs,
+    fats,
+    difficulty,
+    category,
+    setFilteredRecipes,
+  ]);
+
+  // Stable debounced filter
+  const debouncedFilter = useMemo(
+    () => debounce(filterRecipes, 1000),
+    [debounce, filterRecipes]
+  );
 
   useEffect(() => {
-    setFilteredRecipes(filteredRecipes);
-  }, [filteredRecipes, setFilteredRecipes]);
+    debouncedFilter();
+  }, [debouncedFilter]);
 
-  const resetFilters = () => {
+  const resetFilters = useCallback(() => {
     setCalories({ min: 0, max: 1000 });
     setProtein({ min: 0, max: 100 });
     setCarbs({ min: 0, max: 100 });
@@ -80,93 +218,7 @@ export default function SidebarFilter({
     setDifficulty("All");
     setCategory("all");
     router.push(`/discover`);
-  };
-
-  const debounce = (func: (...args: any) => void, timeout = 300) => {
-    let timer: NodeJS.Timeout;
-    return (...args: any) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), timeout);
-    };
-  };
-
-  const RangeSlider = ({
-    label,
-    value,
-    onChange,
-    max,
-    step,
-  }: {
-    label: string;
-    value: NutrientRange;
-    onChange: (value: NutrientRange) => void;
-    max: number;
-    step: number;
-  }) => {
-    const [internalValue, setInternalValue] = useState(value);
-
-    const debouncedOnChange = useMemo(
-      () => debounce((newValue: NutrientRange) => onChange(newValue), 300),
-      [onChange]
-    );
-
-    const handleInputChange = (type: "min" | "max", inputValue: string) => {
-      const numValue = Number(inputValue);
-      if (!isNaN(numValue)) {
-        const updatedValue =
-          type === "min"
-            ? { ...internalValue, min: Math.min(numValue, internalValue.max) }
-            : { ...internalValue, max: Math.max(numValue, internalValue.min) };
-
-        setInternalValue(updatedValue);
-        debouncedOnChange(updatedValue);
-      }
-    };
-
-    return (
-      <div className="macros-filters">
-        <Label className="mt-2">{label}</Label>
-        <div className="flex items-center space-x-2">
-          <Label htmlFor={`${label}-min`} className="w-8 text-xs">
-            Min
-          </Label>
-          <Input
-            id={`${label}-min`}
-            type="number"
-            min={0}
-            max={internalValue.max}
-            value={internalValue.min}
-            onChange={(e) => handleInputChange("min", e.target.value)}
-            className="w-20"
-          />
-          <Label htmlFor={`${label}-max`} className="w-8 text-xs">
-            Max
-          </Label>
-          <Input
-            id={`${label}-max`}
-            type="number"
-            min={internalValue.min}
-            max={max}
-            value={internalValue.max}
-            onChange={(e) => handleInputChange("max", e.target.value)}
-            className="w-20"
-          />
-        </div>
-        <Slider
-          min={0}
-          max={max}
-          step={step}
-          value={[internalValue.min, internalValue.max]}
-          onValueChange={(newValue) => {
-            const updatedValue = { min: newValue[0], max: newValue[1] };
-            setInternalValue(updatedValue);
-            debouncedOnChange(updatedValue);
-          }}
-          className="mt-2"
-        />
-      </div>
-    );
-  };
+  }, [router]);
 
   return (
     <div className={`sidebar-wrapper ${isOpen ? "open" : ""}`}>
@@ -190,7 +242,7 @@ export default function SidebarFilter({
             </div>
           </div>
           <div className="space-y-2">
-            <Label>Recipe Categories</Label>
+            <Label className="font-semibold">Recipe Categories</Label>
             <form className="category-filter">
               <div className="category-item ">
                 <input
@@ -261,7 +313,9 @@ export default function SidebarFilter({
             step={20}
           />
           <div className="space-y-2">
-            <Label htmlFor="difficulty">Difficulty Level</Label>
+            <Label htmlFor="difficulty" className="font-semibold">
+              Difficulty Level
+            </Label>
             <Select value={difficulty} onValueChange={setDifficulty}>
               <SelectTrigger id="difficulty">
                 <SelectValue placeholder="Select difficulty" />

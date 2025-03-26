@@ -95,7 +95,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
             {Array.from({ length: chefHatCount }).map((_, index) => (
               <Image
                 key={index}
-                src="/chef.png"
+                src="/chef.webp"
                 alt="chef hat icon"
                 width={25}
                 height={25}
