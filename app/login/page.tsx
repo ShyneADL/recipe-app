@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "./login.modules.css";
-import { createAccount, login, googleAuth } from "@/lib/appwrite";
 import Loading from "../loading";
 
 export default function AuthComponent() {
@@ -22,66 +21,6 @@ export default function AuthComponent() {
       ...formData,
       [e.target.name]: e.target.value,
     });
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-    try {
-      const { session, user } = await login(formData.email, formData.password);
-      if (session && user) {
-        router.push("/");
-        router.refresh();
-      } else {
-        throw new Error("Failed to login");
-      }
-    } catch (error: any) {
-      setError(error.message || "Failed to login");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-    try {
-      const account = await createAccount(
-        formData.email,
-        formData.password,
-        formData.name
-      );
-      if (account) {
-        const { session, user } = await login(
-          formData.email,
-          formData.password
-        );
-        if (session && user) {
-          router.push("/");
-          router.refresh();
-        } else {
-          throw new Error("Failed to login after signup");
-        }
-      }
-    } catch (error: any) {
-      setError(error.message || "Failed to create account");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    setIsLoading(true);
-    setError("");
-    try {
-      await googleAuth();
-      // The redirect will happen automatically
-    } catch (error: any) {
-      setError(error.message || "Failed to login with Google");
-      setIsLoading(false);
-    }
   };
 
   const toggleForm = () => {
@@ -127,7 +66,7 @@ export default function AuthComponent() {
           <div className="user_forms-login">
             <h2 className="forms_title">Login</h2>
             {error && <div className="error-message">{error}</div>}
-            <form className="forms_form" onSubmit={handleLogin}>
+            <form className="forms_form">
               <fieldset className="forms_fieldset">
                 <div className="forms_field">
                   <input
@@ -164,11 +103,7 @@ export default function AuthComponent() {
                 />
               </div>
               <div className="forms_social">
-                <button
-                  type="button"
-                  onClick={handleGoogleLogin}
-                  className="forms_buttons-google"
-                >
+                <button type="button" className="forms_buttons-google">
                   <img src="/google.svg" alt="Google" className="google-icon" />
                   Sign in with Google
                 </button>
@@ -179,7 +114,7 @@ export default function AuthComponent() {
           <div className="user_forms-signup">
             <h2 className="forms_title">Sign Up</h2>
             {error && <div className="error-message">{error}</div>}
-            <form className="forms_form" onSubmit={handleSignup}>
+            <form className="forms_form">
               <fieldset className="forms_fieldset">
                 <div className="forms_field">
                   <input
@@ -223,11 +158,7 @@ export default function AuthComponent() {
                 />
               </div>
               <div className="forms_social">
-                <button
-                  type="button"
-                  onClick={handleGoogleLogin}
-                  className="forms_buttons-google"
-                >
+                <button type="button" className="forms_buttons-google">
                   <img src="/google.svg" alt="Google" className="google-icon" />
                   Sign up with Google
                 </button>
