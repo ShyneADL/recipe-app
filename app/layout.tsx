@@ -19,7 +19,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="relative">
         <NavBar />
-        <StoreProvider>{children}</StoreProvider>
+        <main className="pt-[72px]">
+          <StoreProvider>{children}</StoreProvider>
+        </main>
         <Footer />
         <Analytics />
       </body>

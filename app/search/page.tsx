@@ -53,7 +53,7 @@ const SearchContent = () => {
 
   return (
     <>
-      <div className="w-full max-w-3xl mx-auto mb-6">
+      <div className="w-full max-w-3xl mx-auto my-6">
         <SearchBar />
       </div>
 
