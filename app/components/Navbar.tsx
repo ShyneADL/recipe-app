@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CustomButton from "./CustomButton";
 import { navLinks } from "./ProjectData";
 import { getCurrentUser, logout } from "@/lib/appwrite";
@@ -23,6 +23,13 @@ const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleMouseEnter = useCallback(
+    (href: string) => {
+      router.prefetch(href);
+    },
+    [router]
+  );
 
   useEffect(() => {
     const checkUser = async () => {
@@ -70,6 +77,7 @@ const NavBar = () => {
             <li key={item.name}>
               <Link
                 href={item.link}
+                onMouseEnter={() => handleMouseEnter(item.link)}
                 className={`text-[1rem] font-medium ${
                   pathname === item.link ? "text-primary-red" : "text-black"
                 }`}
@@ -133,6 +141,7 @@ const NavBar = () => {
               <li key={item.name}>
                 <Link
                   href={item.link}
+                  onMouseEnter={() => handleMouseEnter(item.link)}
                   className={`text-[1rem] font-medium ${
                     pathname === item.link ? "text-primary-red" : "text-black"
                   }`}
