@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import CustomButton from "./CustomButton";
 import { navLinks } from "./ProjectData";
-import { getCurrentUser, logout } from "@/lib/appwrite";
 
 interface NavLinks {
   name: string;
@@ -21,8 +20,6 @@ const NavBar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleMouseEnter = useCallback(
     (href: string) => {
@@ -30,29 +27,6 @@ const NavBar = () => {
     },
     [router]
   );
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const currentUser = await getCurrentUser();
-      if (currentUser) {
-        setUser({
-          name: currentUser.name,
-          email: currentUser.email,
-        });
-      }
-    };
-    checkUser();
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      setUser(null);
-      router.push("/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -151,29 +125,8 @@ const NavBar = () => {
                 </Link>
               </li>
             ))}
-            {user ? (
-              <>
-                <li className="border-t pt-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-primary-red text-white flex items-center justify-center text-sm">
-                      {user.name.charAt(0).toUpperCase()}
-                    </div>
-                    <span className="text-black font-medium">{user.name}</span>
-                  </div>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      toggleMenu();
-                    }}
-                    className="text-black text-[1rem] font-medium hover:text-primary-red transition ease duration-300"
-                  >
-                    Sign out
-                  </button>
-                </li>
-              </>
-            ) : (
-              <div></div>
-            )}
+
+            <div></div>
           </ul>
         </div>
       </nav>
