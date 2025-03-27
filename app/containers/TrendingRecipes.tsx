@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { RecipeProps } from "@/app/types";
 import { RecipeCard } from "@/app/components";
 import { useRecipes } from "../hooks/useRecipes";
 import Image from "next/image";
