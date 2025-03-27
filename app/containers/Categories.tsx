@@ -1,20 +1,16 @@
 "use client";
-import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation"; // Correct useRouter import
+import Image from "next/image";
+import Link from "next/link";
 import { CategoryProps } from "@/app/types";
-import { useRecipeStore } from "../store/recipeStore";
+import { useCategories } from "../hooks/useRecipes";
 
 const Categories = () => {
-  const { categories, initializeStore } = useRecipeStore();
+  const { data: categories = [], isLoading } = useCategories();
   const [showLeftIcon, setShowLeftIcon] = useState(false);
   const [showRightIcon, setShowRightIcon] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const router = useRouter(); // Initialize the router
-
-  useEffect(() => {
-    initializeStore();
-  }, [initializeStore]);
+  // Initialize the router
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -56,10 +52,9 @@ const Categories = () => {
     };
   }, []);
 
-  const handleCategoryClick = (category: string) => {
-    // Navigate to the filter page with the category as a query parameter
-    router.push(`/discover?category=${category}`);
-  };
+  if (isLoading) {
+    return <div>Loading categories...</div>;
+  }
 
   return (
     <div className="mt-12 padding-x padding-y max-width" id="discover">
@@ -90,10 +85,12 @@ const Categories = () => {
           >
             {categories.length > 0 ? (
               categories.map((category: CategoryProps) => (
-                <div
+                <Link
                   key={category.id}
+                  href={`/discover?category=${encodeURIComponent(
+                    category.category
+                  )}`}
                   className="p-3 flex flex-col flex-shrink-0 items-center gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer lg:w-[200px] w-[120px]"
-                  onClick={() => handleCategoryClick(category.category)} // Handle click event
                 >
                   <div className="rounded-full lg:w-[200px] w-[120px]">
                     <Image
@@ -107,7 +104,7 @@ const Categories = () => {
                   <h2 className="text-black font-bold text-[1rem] text-center">
                     {category.category}
                   </h2>
-                </div>
+                </Link>
               ))
             ) : (
               <p>Loading categories...</p>

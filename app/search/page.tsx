@@ -3,14 +3,13 @@ import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { RecipeProps } from "@/app/types";
 import { Loading, RecipeCard, SearchBar } from "@/app/components";
-import { useRecipeStore } from "../store/recipeStore";
+import { useRecipes } from "../hooks/useRecipes";
 
 // Separate the content that uses useSearchParams into a client component
 const SearchContent = () => {
-  const { recipes, initializeStore } = useRecipeStore();
+  const { data: recipes = [], isLoading: isLoadingRecipes } = useRecipes();
   const [displayedRecipes, setDisplayedRecipes] = useState<RecipeProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
   const pageSize = 12;
 
   const searchParams = useSearchParams();
@@ -20,11 +19,6 @@ const SearchContent = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery]);
-
-  // Fetch recipes once on component mount
-  useEffect(() => {
-    initializeStore();
-  }, [initializeStore]);
 
   // Filter recipes when search query changes
   useEffect(() => {
@@ -58,7 +52,7 @@ const SearchContent = () => {
       </div>
 
       <main className="w-full">
-        {isLoading ? (
+        {isLoadingRecipes ? (
           <div className="flex justify-center items-center h-40">
             <Loading />
           </div>

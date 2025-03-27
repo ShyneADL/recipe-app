@@ -4,11 +4,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import SearchRecipe from "./SearchRecipe";
 import { RecipeProps } from "@/app/types";
 import { Loading } from "@/app/components";
-import { useRecipeStore } from "../store/recipeStore";
+import { useRecipes } from "../hooks/useRecipes";
 
 // Separate the content that uses client-side hooks into its own component
 const SearchBarContent = () => {
-  const { recipes, initializeStore } = useRecipeStore();
+  const { data: recipes = [] } = useRecipes();
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -20,10 +20,6 @@ const SearchBarContent = () => {
       setSearchQuery(queryParam);
     }
   }, [searchParams]);
-
-  useEffect(() => {
-    initializeStore();
-  }, [initializeStore]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

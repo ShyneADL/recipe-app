@@ -1,20 +1,19 @@
 "use client";
 import React from "react";
-
 import { RecipeCard } from "@/app/components";
-import { useRecipeStore } from "../store/recipeStore";
-import { RecipeProps } from "../types";
+import { useRecipes } from "../hooks/useRecipes";
 
 const FeaturedMacrosSection = () => {
-  const recipes = useRecipeStore((state) => state.recipes);
+  const { data: recipes = [], isLoading } = useRecipes();
 
+  if (isLoading) {
+    return <div>Loading featured recipes...</div>;
+  }
+
+  // Get recipes with high protein content
   const highProteinRecipes = recipes
-    .filter(
-      (recipe: RecipeProps) =>
-        recipe.protein_in_grams > 20 && recipe.protein_in_grams < 50
-    )
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 3);
+    .filter((recipe) => recipe.protein_in_grams > 20)
+    .slice(0, 6);
 
   return (
     <div className="flex flex-col items-center justify-center gap-10 padding-x padding-y max-width">

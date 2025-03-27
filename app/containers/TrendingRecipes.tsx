@@ -1,15 +1,18 @@
 "use client";
 import React from "react";
-import Image from "next/image";
+import { RecipeProps } from "@/app/types";
 import { RecipeCard } from "@/app/components";
-import { useRecipeStore } from "../store/recipeStore";
+import { useRecipes } from "../hooks/useRecipes";
+import Image from "next/image";
 
 const TrendingRecipes = () => {
-  const recipes = useRecipeStore((state) => state.recipes);
+  const { data: recipes = [], isLoading } = useRecipes();
 
-  const slicedRecipes = [...recipes]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 6);
+  if (isLoading) {
+    return <div>Loading trending recipes...</div>;
+  }
+
+  const trendingRecipes = recipes.slice(0, 6);
 
   return (
     <div className="flex flex-col items-center justify-center gap-10 padding-y padding-x max-width">
@@ -18,7 +21,7 @@ const TrendingRecipes = () => {
         <Image src="/trending.svg" alt="Trending icon" width={50} height={50} />
       </div>
       <div className="recipe-container">
-        {slicedRecipes.map((recipe) => (
+        {trendingRecipes.map((recipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
       </div>

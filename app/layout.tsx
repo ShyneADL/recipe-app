@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
-import { StoreProvider } from "./store/storeProvider";
 import NavBar from "./components/Navbar";
 import Footer from "./components/Footer";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Recipe App",
@@ -18,12 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-manrope">
-        <StoreProvider>
+        <Providers>
           <NavBar />
           {children}
           <Footer />
           <Analytics />
-        </StoreProvider>
+        </Providers>
       </body>
     </html>
   );
