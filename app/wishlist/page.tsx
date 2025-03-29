@@ -1,66 +1,27 @@
 "use client";
 import React, { useState, useEffect, Suspense } from "react";
 import { RecipeProps } from "@/app/types";
+import { useRecipes } from "../hooks/useRecipes";
+import RecipeCardSkeleton from "../components/RecipeCardSkeleton";
 import { Loading, RecipeCard } from "@/app/components";
 
 const Page = () => {
-  const [wishlistItems, setWishlistItems] = useState<RecipeProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [wishlistItems, setWishlistItems] = useState<RecipeProps[]>([]);
   const pageSize = 12;
 
+  const { data: recipes, isLoading } = useRecipes();
+
   useEffect(() => {
-    const fetchWishlistItems = async () => {
-      setIsLoading(true);
-      try {
-        // Get wishlist IDs from localStorage
-        const wishlistData = localStorage.getItem("wishlist");
-        const wishlistIds = wishlistData ? JSON.parse(wishlistData) : [];
+    const storedWishlist = localStorage.getItem("wishlist");
+    if (storedWishlist) {
+      const wishlistIds = JSON.parse(storedWishlist);
+      const wishlistRecipes =
+        recipes?.filter((recipe) => wishlistIds.includes(recipe.id)) || [];
+      setWishlistItems(wishlistRecipes);
+    }
+  }, [recipes]);
 
-        if (wishlistIds.length === 0) {
-          setWishlistItems([]);
-          setIsLoading(false);
-          return;
-        }
-
-        const response = await fetch("https://keto-diet.p.rapidapi.com/", {
-          headers: {
-            "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
-            "x-rapidapi-host": "keto-diet.p.rapidapi.com",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch recipes");
-        }
-
-        const allRecipes = await response.json();
-
-        // Filter recipes to only include those in the wishlist
-        const wishlisted = allRecipes.filter((recipe: RecipeProps) =>
-          wishlistIds.includes(recipe.id)
-        );
-
-        setWishlistItems(wishlisted);
-      } catch (error) {
-        console.error("Error fetching wishlist items:", error);
-        setWishlistItems([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchWishlistItems();
-  }, []); // Empty dependency array means this runs once on mount
-
-  // Add debugging logs
-  useEffect(() => {
-    const wishlistData = localStorage.getItem("wishlist");
-    console.log("Wishlist IDs in localStorage:", wishlistData);
-    console.log("Current wishlist items:", wishlistItems);
-  }, [wishlistItems]);
-
-  // Pagination logic
   const indexOfLastRecipe = currentPage * pageSize;
   const indexOfFirstRecipe = indexOfLastRecipe - pageSize;
   const currentRecipes = wishlistItems.slice(
@@ -109,9 +70,11 @@ const Page = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[50vh]">
-        <Loading />
-      </div>
+      <ul className="recipe-container">
+        {Array.from({ length: pageSize }).map((_, index) => (
+          <RecipeCardSkeleton key={index} />
+        ))}
+      </ul>
     );
   }
 
@@ -122,6 +85,7 @@ const Page = () => {
           {wishlistItems.length > 0 ? (
             <>
               <h1 className="text-2xl font-bold mb-6">Your Wishlist</h1>
+
               <ul className="recipe-container">
                 {currentRecipes.map((recipe) => (
                   <RecipeCard key={recipe.id} recipe={recipe} />

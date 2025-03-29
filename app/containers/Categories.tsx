@@ -4,13 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { CategoryProps } from "@/app/types";
 import { useCategories } from "../hooks/useRecipes";
+import CategorySkeleton from "../components/CategorySkeleton";
 
 const Categories = () => {
   const { data: categories = [], isLoading } = useCategories();
   const [showLeftIcon, setShowLeftIcon] = useState(false);
   const [showRightIcon, setShowRightIcon] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
-  // Initialize the router
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -52,10 +52,6 @@ const Categories = () => {
     };
   }, []);
 
-  if (isLoading) {
-    return <div>Loading categories...</div>;
-  }
-
   return (
     <div className="mt-12 padding-x padding-y max-width" id="discover">
       <div className="categories-container">
@@ -83,32 +79,33 @@ const Categories = () => {
             ref={scrollRef}
             className="flex items-center gap-5 overflow-x-scroll scrollbar max-w-[1000px]"
           >
-            {categories.length > 0 ? (
-              categories.map((category: CategoryProps) => (
-                <Link
-                  key={category.id}
-                  href={`/discover?category=${encodeURIComponent(
-                    category.category
-                  )}`}
-                  className="p-3 flex flex-col flex-shrink-0 items-center gap-2 rounded-2xl hover:bg-lightGrey cursor-pointer lg:w-[200px] w-[120px]"
-                >
-                  <div className="rounded-full lg:w-[200px] w-[120px]">
-                    <Image
-                      src={category.thumbnail}
-                      alt={category.category}
-                      className="object-contain"
-                      width={200}
-                      height={200}
-                    />
-                  </div>
-                  <h2 className="text-black font-bold text-[1rem] text-center">
-                    {category.category}
-                  </h2>
-                </Link>
-              ))
-            ) : (
-              <p>Loading categories...</p>
-            )}
+            {isLoading
+              ? // Show 8 skeletons while loading
+                Array.from({ length: 8 }).map((_, index) => (
+                  <CategorySkeleton key={index} />
+                ))
+              : categories.map((category: CategoryProps) => (
+                  <Link
+                    key={category.id}
+                    href={`/discover?category=${encodeURIComponent(
+                      category.category
+                    )}`}
+                    className="flex flex-col items-center p-4 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="rounded-full lg:w-[200px] w-[120px]">
+                      <Image
+                        src={category.thumbnail || "/placeholder.jpg"}
+                        alt={category.category}
+                        width={200}
+                        height={200}
+                        className="object-contain"
+                      />
+                    </div>
+                    <span className="text-black font-bold text-[1rem] text-center">
+                      {category.category}
+                    </span>
+                  </Link>
+                ))}
           </div>
 
           {/* Right icon */}

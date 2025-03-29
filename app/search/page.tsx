@@ -4,8 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { RecipeProps } from "@/app/types";
 import { Loading, RecipeCard, SearchBar } from "@/app/components";
 import { useRecipes } from "../hooks/useRecipes";
+import RecipeCardSkeleton from "../components/RecipeCardSkeleton";
 
-// Separate the content that uses useSearchParams into a client component
 const SearchContent = () => {
   const { data: recipes = [], isLoading: isLoadingRecipes } = useRecipes();
   const [displayedRecipes, setDisplayedRecipes] = useState<RecipeProps[]>([]);
@@ -53,9 +53,11 @@ const SearchContent = () => {
 
       <main className="w-full">
         {isLoadingRecipes ? (
-          <div className="flex justify-center items-center h-40">
-            <Loading />
-          </div>
+          <ul className="recipe-container">
+            {Array.from({ length: pageSize }).map((_, index) => (
+              <RecipeCardSkeleton key={index} />
+            ))}
+          </ul>
         ) : (
           <>
             {searchQuery && (

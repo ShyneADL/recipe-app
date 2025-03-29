@@ -2,13 +2,14 @@
 import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import SidebarFilter from "@/app/components/SidebarFilter";
-import { RecipeProps, CategoryProps } from "@/app/types";
-import { Loading, RecipeCard } from "@/app/components";
+import { RecipeProps } from "@/app/types";
+import { RecipeCard } from "@/app/components";
 import Image from "next/image";
 import {
   useRecipesAndCategories,
   useFilteredRecipes,
 } from "../hooks/useRecipes";
+import RecipeCardSkeleton from "../components/RecipeCardSkeleton";
 
 const RecipeContent = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,9 +63,11 @@ const RecipeContent = () => {
 
       <main className="w-full">
         {isLoading ? (
-          <div className="flex justify-center items-center h-40">
-            <Loading />
-          </div>
+          <ul className="recipe-container">
+            {Array.from({ length: pageSize }).map((_, index) => (
+              <RecipeCardSkeleton key={index} />
+            ))}
+          </ul>
         ) : (
           <>
             <ul className="recipe-container">

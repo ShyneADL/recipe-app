@@ -1,14 +1,12 @@
 "use client";
 import React from "react";
+import { RecipeProps } from "@/app/types";
 import { RecipeCard } from "@/app/components";
 import { useRecipes } from "../hooks/useRecipes";
+import RecipeCardSkeleton from "../components/RecipeCardSkeleton";
 
 const FeaturedMacrosSection = () => {
   const { data: recipes = [], isLoading } = useRecipes();
-
-  if (isLoading) {
-    return <div>Loading featured recipes...</div>;
-  }
 
   // Get recipes with high protein content
   const highProteinRecipes = recipes
@@ -20,9 +18,14 @@ const FeaturedMacrosSection = () => {
       <h2 className="big-text">Power Up: High-Protein Keto Recipes</h2>
 
       <div className="recipe-container">
-        {highProteinRecipes.map((recipe) => {
-          return <RecipeCard key={recipe.id} recipe={recipe} />;
-        })}
+        {isLoading
+          ? // Show 6 skeletons while loading
+            Array.from({ length: 6 }).map((_, index) => (
+              <RecipeCardSkeleton key={index} />
+            ))
+          : highProteinRecipes.map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} />
+            ))}
       </div>
     </div>
   );

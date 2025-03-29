@@ -1,16 +1,15 @@
 "use client";
 import React from "react";
+
 import { RecipeCard } from "@/app/components";
 import { useRecipes } from "../hooks/useRecipes";
 import Image from "next/image";
+import RecipeCardSkeleton from "../components/RecipeCardSkeleton";
 
 const TrendingRecipes = () => {
   const { data: recipes = [], isLoading } = useRecipes();
 
-  if (isLoading) {
-    return <div>Loading trending recipes...</div>;
-  }
-
+  // Get the first 6 recipes for trending section
   const trendingRecipes = recipes.slice(0, 6);
 
   return (
@@ -20,9 +19,14 @@ const TrendingRecipes = () => {
         <Image src="/trending.svg" alt="Trending icon" width={50} height={50} />
       </div>
       <div className="recipe-container">
-        {trendingRecipes.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
-        ))}
+        {isLoading
+          ? // Show 6 skeletons while loading
+            Array.from({ length: 6 }).map((_, index) => (
+              <RecipeCardSkeleton key={index} />
+            ))
+          : trendingRecipes.map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} />
+            ))}
       </div>
     </div>
   );
