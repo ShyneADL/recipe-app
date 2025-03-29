@@ -1,45 +1,61 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import SidebarFilter from "@/app/components/SidebarFilter";
-import { RecipeProps } from "@/app/types";
+import { RecipeProps, CategoryProps } from "@/app/types";
 import { RecipeCard } from "@/app/components";
 import Image from "next/image";
-import {
-  useRecipesAndCategories,
-  useFilteredRecipes,
-} from "../hooks/useRecipes";
+import { useRecipesAndCategories } from "../hooks/useRecipes";
 import RecipeCardSkeleton from "../components/RecipeCardSkeleton";
 
 const RecipeContent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
+  const [filteredRecipes, setFilteredRecipes] = useState<RecipeProps[]>([]);
   const pageSize = 12;
 
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
 
-  const { data: recipesAndCategories, isLoading: isLoadingData } =
-    useRecipesAndCategories();
-  const { data: filteredRecipes, isLoading: isLoadingFiltered } =
-    useFilteredRecipes(categoryParam);
-
+  const { data: recipesAndCategories, isLoading } = useRecipesAndCategories();
   const recipes = recipesAndCategories?.recipes || [];
   const categories = recipesAndCategories?.categories || [];
-  const isLoading = isLoadingData || isLoadingFiltered;
+
+  // Filter recipes when category changes or when data is loaded
+  useEffect(() => {
+    if (!recipes.length) return;
+
+    if (categoryParam) {
+      const filtered = recipes.filter(
+        (recipe) =>
+          recipe.category?.category?.toLowerCase() ===
+          categoryParam.toLowerCase()
+      );
+      setFilteredRecipes(filtered);
+    } else {
+      setFilteredRecipes(recipes);
+    }
+
+    // Reset to first page when filters change
+    setCurrentPage(1);
+  }, [categoryParam, recipes]);
 
   const toggleFilters = () => setIsOpen(!isOpen);
   const closeFilters = () => setIsOpen(false);
 
+  // For SidebarFilter - when filter is changed within the component
   const handleFilterChange = (newFilteredRecipes: RecipeProps[]) => {
-    // No need to handle filter change as it's managed by the URL
+    setFilteredRecipes(newFilteredRecipes);
+    setCurrentPage(1);
   };
 
   const indexOfLastRecipe = currentPage * pageSize;
   const indexOfFirstRecipe = indexOfLastRecipe - pageSize;
-  const currentRecipes =
-    filteredRecipes?.slice(indexOfFirstRecipe, indexOfLastRecipe) || [];
-  const totalPages = Math.ceil((filteredRecipes?.length || 0) / pageSize);
+  const currentRecipes = filteredRecipes.slice(
+    indexOfFirstRecipe,
+    indexOfLastRecipe
+  );
+  const totalPages = Math.ceil(filteredRecipes.length / pageSize);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -82,7 +98,7 @@ const RecipeContent = () => {
               )}
             </ul>
 
-            {filteredRecipes && filteredRecipes.length > pageSize && (
+            {filteredRecipes.length > pageSize && (
               <div className="pagination">
                 <button
                   onClick={() => paginate(currentPage - 1)}
