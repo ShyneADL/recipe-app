@@ -2,12 +2,12 @@ import React from "react";
 
 const CategorySkeleton = () => {
   return (
-    <div className="flex flex-col items-center p-4 rounded-lg hover:bg-gray-100 transition-colors animate-pulse">
+    <div className="flex flex-col items-center p-2 md:p-4 rounded-lg animate-pulse shrink-0">
       {/* Image skeleton */}
-      <div className="rounded-md lg:w-[200px] w-[120px] lg:h-[200px] h-[120px] bg-gray-200 mb-4" />
+      <div className="rounded-full lg:w-[180px] md:w-[150px] w-[80px] aspect-square bg-gray-200" />
 
       {/* Category name skeleton */}
-      <div className="w-20 h-4 bg-gray-200 rounded" />
+      <div className="w-16 md:w-20 h-4 bg-gray-200 rounded mt-2" />
     </div>
   );
 };

@@ -17,7 +17,12 @@ const RecipeContent = () => {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
 
-  const { data: recipesAndCategories, isLoading } = useRecipesAndCategories();
+  const {
+    data: recipesAndCategories,
+    isLoading,
+    isError,
+    error,
+  } = useRecipesAndCategories();
   const recipes = recipesAndCategories?.recipes || [];
   const categories = recipesAndCategories?.categories || [];
 
@@ -29,7 +34,7 @@ const RecipeContent = () => {
       const filtered = recipes.filter(
         (recipe) =>
           recipe.category?.category?.toLowerCase() ===
-          categoryParam.toLowerCase()
+          categoryParam.toLowerCase(),
       );
       setFilteredRecipes(filtered);
     } else {
@@ -53,7 +58,7 @@ const RecipeContent = () => {
   const indexOfFirstRecipe = indexOfLastRecipe - pageSize;
   const currentRecipes = filteredRecipes.slice(
     indexOfFirstRecipe,
-    indexOfLastRecipe
+    indexOfLastRecipe,
   );
   const totalPages = Math.ceil(filteredRecipes.length / pageSize);
 
@@ -84,6 +89,11 @@ const RecipeContent = () => {
               <RecipeCardSkeleton key={index} />
             ))}
           </ul>
+        ) : isError ? (
+          <div className="text-center py-20 text-red-500 w-full">
+            <h2 className="text-2xl font-bold mb-2">Something went wrong</h2>
+            <p>{(error as Error)?.message}</p>
+          </div>
         ) : (
           <>
             <ul className="recipe-container">

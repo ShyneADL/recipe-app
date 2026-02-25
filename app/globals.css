@@ -27,7 +27,8 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Manrope", sans-serif;
-  transition: background-color 0.3s ease-in;
+  /* Removed global transition — it forces the browser to track compositing
+   * layers for every element. Transitions are applied per-component instead. */
 }
 
 /* START: General styles */
@@ -327,7 +328,7 @@ input[type="number"] {
 
 .category-item {
   @apply flex items-center p-[8px] cursor-pointer bg-[#fff] rounded-[6px] space-x-2;
-  transition: background-color 0.3s ease-in;
+  transition: background-color 0.2s ease-in;
 }
 
 .category-item:hover {

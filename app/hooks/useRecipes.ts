@@ -11,12 +11,14 @@ interface RecipesAndCategories {
   categories: CategoryProps[];
 }
 
+// All hooks inherit staleTime: Infinity and gcTime: Infinity from the
+// global QueryClient config \u2014 data is fetched once and kept forever.
+// Individual overrides are no longer needed.
+
 export const useRecipes = () => {
   return useQuery<RecipeProps[]>({
     queryKey: ["recipes"],
     queryFn: fetchRecipes,
-    staleTime: 3600 * 1000, // Consider data stale after 1 hour
-    gcTime: 24 * 3600 * 1000, // Keep in cache for 24 hours
   });
 };
 
@@ -24,8 +26,6 @@ export const useCategories = () => {
   return useQuery<CategoryProps[]>({
     queryKey: ["categories"],
     queryFn: fetchCategories,
-    staleTime: 3600 * 1000,
-    gcTime: 24 * 3600 * 1000,
   });
 };
 
@@ -33,8 +33,6 @@ export const useRecipesAndCategories = () => {
   return useQuery<RecipesAndCategories>({
     queryKey: ["recipesAndCategories"],
     queryFn: fetchRecipesAndCategories,
-    staleTime: 3600 * 1000,
-    gcTime: 24 * 3600 * 1000,
   });
 };
 
@@ -45,7 +43,7 @@ export const useFilteredRecipes = (category: string | null) => {
     data: category
       ? recipes.filter(
           (recipe: RecipeProps) =>
-            recipe.category?.category?.toLowerCase() === category.toLowerCase()
+            recipe.category?.category?.toLowerCase() === category.toLowerCase(),
         )
       : recipes,
     isLoading: false,

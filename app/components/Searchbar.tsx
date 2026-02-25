@@ -8,7 +8,7 @@ import { useRecipes } from "../hooks/useRecipes";
 
 // Separate the content that uses client-side hooks into its own component
 const SearchBarContent = () => {
-  const { data: recipes = [] } = useRecipes();
+  const { data: recipes = [], isError } = useRecipes();
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -53,15 +53,22 @@ const SearchBarContent = () => {
   };
 
   return (
-    <form className="searchbar" onSubmit={handleSearch}>
-      <SearchRecipe
-        recipes={recipes}
-        onSelect={handleRecipeSelect}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        onClear={clearSearch}
-      />
-    </form>
+    <div className="flex flex-col w-full gap-2">
+      <form className="searchbar" onSubmit={handleSearch}>
+        <SearchRecipe
+          recipes={recipes}
+          onSelect={handleRecipeSelect}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          onClear={clearSearch}
+        />
+      </form>
+      {isError && (
+        <p className="text-red-500 text-xs text-center">
+          Suggestions currently unavailable.
+        </p>
+      )}
+    </div>
   );
 };
 
