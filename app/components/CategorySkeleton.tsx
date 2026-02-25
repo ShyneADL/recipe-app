@@ -4,10 +4,10 @@ const CategorySkeleton = () => {
   return (
     <div className="flex flex-col items-center p-2 md:p-4 rounded-lg animate-pulse shrink-0">
       {/* Image skeleton */}
-      <div className="rounded-full lg:w-[180px] md:w-[150px] w-[80px] aspect-square bg-gray-200" />
+      <div className="rounded-full lg:w-[180px] md:w-[150px] w-[80px] aspect-square bg-gray-200 dark:bg-slate-700" />
 
       {/* Category name skeleton */}
-      <div className="w-16 md:w-20 h-4 bg-gray-200 rounded mt-2" />
+      <div className="w-16 md:w-20 h-4 bg-gray-200 dark:bg-slate-700 rounded mt-2" />
     </div>
   );
 };

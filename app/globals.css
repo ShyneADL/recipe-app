@@ -27,8 +27,10 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Manrope", sans-serif;
-  /* Removed global transition — it forces the browser to track compositing
-   * layers for every element. Transitions are applied per-component instead. */
+  /* Smooth theme transitions */
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* START: General styles */
@@ -416,6 +418,11 @@ input[type="number"] {
   body {
     @apply bg-background text-foreground;
   }
+  /* Explicitly set button and link colors to inherit foreground in dark mode */
+  .dark button,
+  .dark a {
+    @apply text-foreground;
+  }
 }
 
 /* ============================================================
@@ -426,7 +433,15 @@ input[type="number"] {
 
 /* ── Typography ───────────────────────────────────────────── */
 .dark .hero__subtitle {
-  color: #e5e7eb; /* gray-200 */
+  color: #cbd5e1; /* slate-300 */
+}
+
+.text-grey {
+  color: #747a88;
+}
+
+.dark .text-grey {
+  color: #94a3b8; /* slate-400 */
 }
 
 /* All hex values are drawn from the slate-blue palette defined in --background above.

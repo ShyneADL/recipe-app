@@ -27,7 +27,7 @@ const NavBar = () => {
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="w-full z-50 bg-white dark:bg-[#1e293b] border-b border-transparent dark:border-[#334155] transition-colors duration-200">
+    <header className="w-full z-50 bg-white dark:bg-[#1e293b] border-b border-transparent dark:border-[#334155]">
       <nav className="flex justify-between items-center sm:px-16 px-6 py-4 max-w-[1440px] w-full mx-auto">
         {/* Logo */}
         <Link href="/" className="flex justify-center items-center">
@@ -36,7 +36,7 @@ const NavBar = () => {
             alt="logo"
             width={148}
             height={26}
-            className="object-contain dark:invert"
+            className="object-contain"
           />
         </Link>
 

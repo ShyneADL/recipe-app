@@ -26,7 +26,7 @@ const Page = () => {
   const indexOfFirstRecipe = indexOfLastRecipe - pageSize;
   const currentRecipes = wishlistItems.slice(
     indexOfFirstRecipe,
-    indexOfLastRecipe
+    indexOfLastRecipe,
   );
   const totalPages = Math.ceil(wishlistItems.length / pageSize);
 
@@ -130,10 +130,10 @@ const Page = () => {
             </>
           ) : (
             <div className="flex flex-col items-center justify-center min-h-[50vh]">
-              <h2 className="text-xl font-semibold mb-2">
+              <h2 className="text-xl font-semibold mb-2 dark:text-slate-100">
                 Your wishlist is empty
               </h2>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Start adding recipes to your wishlist to see them here!
               </p>
             </div>

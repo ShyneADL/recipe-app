@@ -101,11 +101,17 @@ const RecipeCard: React.FC<RecipeCardProps> = React.memo(({ recipe }) => {
       <h3 className="recipe-name">{recipe.recipe}</h3>
 
       <p className="recipe-text">
-        Calories: <span className="text-grey">{recipe.calories} kcal</span>
+        Calories:{" "}
+        <span className="text-gray-500 dark:text-gray-400">
+          {recipe.calories} kcal
+        </span>
       </p>
 
       <p className="recipe-text">
-        {timeLabel}: <span className="text-grey">{totalTime} min</span>
+        {timeLabel}:{" "}
+        <span className="text-gray-500 dark:text-gray-400">
+          {totalTime} min
+        </span>
       </p>
 
       <div className="flex md:flex-row flex-col md:items-center items-start justify-between w-full">
@@ -127,7 +133,7 @@ const RecipeCard: React.FC<RecipeCardProps> = React.memo(({ recipe }) => {
         </div>
         <button
           onClick={toggleWishlist}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full transition-colors"
           aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
         >
           {/* Inline SVG instead of two separate image files to avoid extra HTTP requests */}

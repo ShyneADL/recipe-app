@@ -10,9 +10,9 @@ import CategorySkeleton from "../components/CategorySkeleton";
 const CategoryItem = memo(({ category }: { category: CategoryProps }) => (
   <Link
     href={`/discover?category=${encodeURIComponent(category.category)}`}
-    className="flex flex-col items-center p-2 md:p-4 rounded-lg hover:bg-gray-100 transition-colors snap-center shrink-0"
+    className="flex flex-col items-center p-2 md:p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/50 transition-colors snap-center shrink-0"
   >
-    <div className="rounded-full lg:w-[180px] md:w-[150px] w-[80px] aspect-square overflow-hidden bg-gray-50 flex-center relative">
+    <div className="rounded-full lg:w-[180px] md:w-[150px] w-[80px] aspect-square overflow-hidden bg-gray-50 dark:bg-slate-700 flex-center relative">
       <Image
         src={category.thumbnail || "/placeholder.jpg"}
         alt={category.category}
@@ -23,7 +23,7 @@ const CategoryItem = memo(({ category }: { category: CategoryProps }) => (
         sizes="(max-width: 768px) 80px, (max-width: 1024px) 150px, 180px"
       />
     </div>
-    <span className="text-black font-bold text-[0.85rem] md:text-[1rem] text-center mt-2 whitespace-nowrap">
+    <span className="text-black dark:text-slate-200 font-bold text-[0.85rem] md:text-[1rem] text-center mt-2 whitespace-nowrap">
       {category.category}
     </span>
   </Link>
@@ -69,7 +69,7 @@ const Categories = () => {
           {/* Left icon - Hidden on mobile */}
           <button
             onClick={scrollLeft}
-            className={`hidden md:flex flex-shrink-0 p-2 bg-white/80 hover:bg-gray-300 rounded-full transition-opacity ${
+            className={`hidden md:flex flex-shrink-0 p-2 bg-white/80 dark:bg-slate-800/80 hover:bg-gray-300 dark:hover:bg-slate-700 rounded-full transition-opacity ${
               showLeftIcon ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
             aria-hidden={!showLeftIcon}
@@ -108,7 +108,7 @@ const Categories = () => {
           {/* Right icon - Hidden on mobile */}
           <button
             onClick={scrollRight}
-            className={`hidden md:flex flex-shrink-0 p-2 bg-white/80 hover:bg-gray-300 rounded-full transition-opacity ${
+            className={`hidden md:flex flex-shrink-0 p-2 bg-white/80 dark:bg-slate-800/80 hover:bg-gray-300 dark:hover:bg-slate-700 rounded-full transition-opacity ${
               showRightIcon ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
             aria-hidden={!showRightIcon}
