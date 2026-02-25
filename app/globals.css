@@ -382,30 +382,31 @@ input[type="number"] {
     --radius: 0.5rem;
   }
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    /* Warm blue-grey palette — #1e293b base (slate-800 equivalent) */
+    --background: 215 28% 17%; /* #1e293b — page bg */
+    --foreground: 215 20% 93%; /* #e2e8f0 — primary text */
+    --card: 215 28% 20%; /* #243047 — card surface */
+    --card-foreground: 215 20% 93%;
+    --popover: 215 28% 20%;
+    --popover-foreground: 215 20% 93%;
+    --primary: 0 84% 60%; /* keep red accent */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 215 25% 24%; /* #2d3f55 — slightly elevated */
+    --secondary-foreground: 215 20% 90%;
+    --muted: 215 25% 24%;
+    --muted-foreground: 215 16% 60%; /* muted text */
+    --accent: 215 25% 27%;
+    --accent-foreground: 215 20% 93%;
+    --destructive: 0 62.8% 45%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --border: 215 22% 26%; /* #334155 — borders */
+    --input: 215 22% 26%;
+    --ring: 215 20% 70%;
+    --chart-1: 220 70% 60%;
+    --chart-2: 160 60% 50%;
+    --chart-3: 30 80% 60%;
+    --chart-4: 280 65% 65%;
+    --chart-5: 340 75% 60%;
   }
 }
 @layer base {
@@ -415,4 +416,109 @@ input[type="number"] {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ============================================================
+   DARK MODE OVERRIDES
+   All custom CSS classes that don't use Tailwind utilities
+   directly need explicit .dark overrides here.
+   ============================================================ */
+
+/* ── Typography ───────────────────────────────────────────── */
+.dark .hero__subtitle {
+  color: #e5e7eb; /* gray-200 */
+}
+
+/* All hex values are drawn from the slate-blue palette defined in --background above.
+   bg-page:    #1e293b (215 28% 17%)
+   bg-surface: #243047 (215 28% 20%)
+   bg-raised:  #2d3f55 (215 25% 24%)
+   border:     #334155 (215 22% 26%)
+   text-main:  #e2e8f0 (215 20% 93%)
+   text-muted: #94a3b8
+*/
+
+/* ── Recipe Cards ─────────────────────────────────────────── */
+.dark .recipe-item {
+  color: #e2e8f0;
+}
+.dark .recipe-item:hover {
+  background-color: #2d3f55;
+}
+.dark .recipe-name {
+  color: #f1f5f9;
+}
+.dark .recipe-text {
+  color: #cbd5e1;
+}
+.dark .recipe-small-text {
+  color: #cbd5e1;
+}
+.dark .recipe-infobox {
+  background-color: #2d3f55;
+}
+
+/* ── Search bar ───────────────────────────────────────────── */
+.dark .searchbar__input,
+.dark .search-recipe__input {
+  background-color: #243047;
+  color: #e2e8f0;
+}
+.dark .search-recipe__options {
+  background-color: #243047;
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+/* ── Categories section ───────────────────────────────────── */
+.dark .category-item {
+  background-color: #243047;
+  color: #e2e8f0;
+}
+.dark .category-item:hover {
+  background-color: #2d3f55;
+}
+.dark .category-text {
+  color: #e2e8f0;
+}
+
+/* ── Sidebar filter ───────────────────────────────────────── */
+.dark .sidebar-wrapper {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+.dark .macros-filters {
+  border-color: #334155;
+}
+
+/* ── Pagination ───────────────────────────────────────────── */
+.dark .pagination-btn {
+  color: #e2e8f0;
+}
+.dark .pagination-btn:hover {
+  background-color: #2d3f55;
+}
+.dark .pagination-btn:disabled {
+  color: #64748b;
+}
+
+/* ── Footer ───────────────────────────────────────────── */
+.dark .footer {
+  color: #cbd5e1;
+  border-color: #334155;
+}
+.dark .footer__copyrights {
+  border-color: #334155;
+}
+
+/* ── Newsletter ───────────────────────────────────────────── */
+.dark .newsletter {
+  background-color: #243047;
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+/* ── Skeleton loaders ─────────────────────────────────────── */
+.dark .bg-gray-200 {
+  background-color: #2d3f55;
 }
